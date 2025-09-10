@@ -1,0 +1,58 @@
+<h1>Users</h1>
+
+{% for user in users %}
+<div style="border:1px solid #ccc; margin-bottom:20px; padding:10px;">
+  <h2>{{ user.full_name }} ({{ user.email }})</h2>
+  <p>Gender: {{ user.gender }}</p>
+  <p>Goal: {{ user.goal }}</p>
+  <img src="{{ user.image }}" alt="Profile" width="100">
+
+  <h3>Routines</h3>
+  <ul>
+    {% for routine in user.routines %}
+      <li>
+        <b>{{ routine.title }}</b> ({{ routine.category }}) - {{ routine.duration }} min
+        <img src="{{ routine.image_url }}" width="80"><br>
+
+        <ul>
+          {% for ex in routine.user_exercises %}
+            <li>
+              {{ ex.title }} ({{ ex.type }})<br>
+              Notes: {{ ex.notes }}<br>
+              Sets:
+              <ul>
+                {% for s in ex.sets %}
+                  <li>Set {{ s.number_of_set }}: {{ s.reps }} reps × {{ s.weight }} kg</li>
+                {% endfor %}
+              </ul>
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% empty %}
+      <li>No routines</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Progress</h3>
+  <ul>
+    {% for progress in user.routines_progress %}
+      <li>
+        Progress ID: {{ progress.id }}<br>
+        Routine ID: {{ progress.routine_id }}<br>
+        Date: {{ progress.date }}
+        <ul>
+          {% for set in progress.completed_sets %}
+            <li>
+              Set {{ set.number_of_set }}: {{ set.reps }} reps × {{ set.weight }} kg
+              (Prev: {{ set.prev_reps }} reps × {{ set.prev_weight }} kg)
+            </li>
+          {% endfor %}
+        </ul>
+      </li>
+    {% empty %}
+      <li>No progress data</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endfor %}

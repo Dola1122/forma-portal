@@ -1,0 +1,34 @@
+<h1>Exercises</h1>
+
+{% for ex in exercises %}
+<div style="border:1px solid #ccc; margin:10px; padding:10px;">
+  <h2>{{ ex.name }}</h2>
+
+  <img src="{{ ex.image_1 }}" width="200">
+  <img src="{{ ex.image_2 }}" width="200">
+
+  <form action="{% url 'update_video_url' ex.id %}" method="post" style="margin-top:10px;">
+    {% csrf_token %}
+    <label>Video URL:</label>
+    <input type="text" name="video_url" value="{{ ex.video_url }}" style="width:300px;">
+    <button type="submit">Save</button>
+  </form>
+
+  <form action="{% url 'update_exercise_type' ex.id %}" method="post" style="margin-top:10px;">
+    {% csrf_token %}
+    <label>Type:</label>
+    <select name="exercise_type">
+      <option value="weight_reps" {% if ex.type == 'weight_reps' %}selected{% endif %}>Weight Reps</option>
+      <option value="bodyweight_reps" {% if ex.type == 'bodyweight_reps' %}selected{% endif %}>Bodyweight Reps</option>
+      <option value="weighted_bodyweight_reps" {% if ex.type == 'weighted_bodyweight_reps' %}selected{% endif %}>Weighted Bodyweight Reps</option>
+      <option value="timed_sets" {% if ex.type == 'timed_sets' %}selected{% endif %}>Timed Sets</option>
+    </select>
+    <button type="submit">Save</button>
+  </form>
+
+  <form action="{% url 'delete_exercise' ex.id %}" method="post" style="margin-top:10px;">
+    {% csrf_token %}
+    <button type="submit" style="color:red;">Delete Exercise</button>
+  </form>
+</div>
+{% endfor %}
