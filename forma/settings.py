@@ -36,7 +36,7 @@ SECRET_KEY = "django-insecure-k%$o&gqli=-@fq)zt7m5+dh)g=r8#2k^k^62ps)eme=z0g%rx%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['forma.pythonanywhere.com']
+ALLOWED_HOSTS = ['forma.pythonanywhere.com', '127.0.0.1', 'localhost']
 
 
 # Application definition

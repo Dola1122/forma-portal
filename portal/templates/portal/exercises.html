@@ -1,34 +1,1111 @@
 <h1>Exercises</h1>
 
+<!-- Create New Exercise Form -->
+<div class="card">
+  <h3>Create New Exercise</h3>
+  
+  <div class="tab-container">
+    <div class="tab-buttons">
+      <button class="tab-button active" onclick="showTab(event, 'new-basic-info')">Basic Info</button>
+      <button class="tab-button" onclick="showTab(event, 'new-details')">Details</button>
+      <button class="tab-button" onclick="showTab(event, 'new-muscles')">Muscles</button>
+      <button class="tab-button" onclick="showTab(event, 'new-instructions')">Instructions</button>
+    </div>
+    
+    <!-- Basic Info Tab -->
+    <div id="new-basic-info" class="tab-content active">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-id">Exercise ID:</label>
+          <input type="text" id="new-exercise-id">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-type">Exercise Type:</label>
+          <select id="new-exercise-type">
+            <option value="weight_reps">Weight Reps</option>
+            <option value="bodyweight_reps">Bodyweight Reps</option>
+            <option value="weighted_bodyweight_reps">Weighted Bodyweight Reps</option>
+            <option value="timed_sets">Timed Sets</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-name">Name (English):</label>
+          <input type="text" id="new-exercise-name">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-name-ar">Name (Arabic):</label>
+          <input type="text" id="new-exercise-name-ar">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="new-exercise-video-url">Video URL (optional):</label>
+        <input type="text" id="new-exercise-video-url">
+      </div>
+    </div>
+    
+    <!-- Details Tab -->
+    <div id="new-details" class="tab-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-category-en">Category (English):</label>
+          <input type="text" id="new-exercise-category-en">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-category-ar">Category (Arabic):</label>
+          <input type="text" id="new-exercise-category-ar">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-equipment-en">Equipment (English):</label>
+          <input type="text" id="new-exercise-equipment-en">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-equipment-ar">Equipment (Arabic):</label>
+          <input type="text" id="new-exercise-equipment-ar">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-force-en">Force (English):</label>
+          <input type="text" id="new-exercise-force-en">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-force-ar">Force (Arabic):</label>
+          <input type="text" id="new-exercise-force-ar">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-level-en">Level (English):</label>
+          <input type="text" id="new-exercise-level-en">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-level-ar">Level (Arabic):</label>
+          <input type="text" id="new-exercise-level-ar">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-mechanic-en">Mechanic (English):</label>
+          <input type="text" id="new-exercise-mechanic-en">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-mechanic-ar">Mechanic (Arabic):</label>
+          <input type="text" id="new-exercise-mechanic-ar">
+        </div>
+      </div>
+    </div>
+    
+    <!-- Muscles Tab -->
+    <div id="new-muscles" class="tab-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Primary Muscles (English):</label>
+          <div id="new-primary-muscles-en-list" class="list-container">
+            <!-- Dynamically added items will appear here -->
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-primary-muscle-en-input">
+            <button class="add-button" onclick="addNewListItem('new-primary-muscles-en-list', 'new-primary-muscle-en-input')">+</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Primary Muscles (Arabic):</label>
+          <div id="new-primary-muscles-ar-list" class="list-container">
+            <!-- Dynamically added items will appear here -->
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-primary-muscle-ar-input">
+            <button class="add-button" onclick="addNewListItem('new-primary-muscles-ar-list', 'new-primary-muscle-ar-input')">+</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Secondary Muscles (English):</label>
+          <div id="new-secondary-muscles-en-list" class="list-container">
+            <!-- Dynamically added items will appear here -->
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-secondary-muscle-en-input">
+            <button class="add-button" onclick="addNewListItem('new-secondary-muscles-en-list', 'new-secondary-muscle-en-input')">+</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Secondary Muscles (Arabic):</label>
+          <div id="new-secondary-muscles-ar-list" class="list-container">
+            <!-- Dynamically added items will appear here -->
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-secondary-muscle-ar-input">
+            <button class="add-button" onclick="addNewListItem('new-secondary-muscles-ar-list', 'new-secondary-muscle-ar-input')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Instructions Tab -->
+    <div id="new-instructions" class="tab-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Instructions (English):</label>
+          <div id="new-instructions-en-list" class="list-container">
+            <!-- Dynamically added items will appear here -->
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-instruction-en-input">
+            <button class="add-button" onclick="addNewListItem('new-instructions-en-list', 'new-instruction-en-input')">+</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Instructions (Arabic):</label>
+          <div id="new-instructions-ar-list" class="list-container">
+            <!-- Dynamically added items will appear here -->
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-instruction-ar-input">
+            <button class="add-button" onclick="addNewListItem('new-instructions-ar-list', 'new-instruction-ar-input')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <button onclick="createExercise()" class="add-button">Create Exercise</button>
+</div>
+
 {% for ex in exercises %}
-<div style="border:1px solid #ccc; margin:10px; padding:10px;">
-  <h2>{{ ex.name }}</h2>
-
-  <img src="{{ ex.image_1 }}" width="200">
-  <img src="{{ ex.image_2 }}" width="200">
-
-  <form action="{% url 'update_video_url' ex.id %}" method="post" style="margin-top:10px;">
-    {% csrf_token %}
-    <label>Video URL:</label>
-    <input type="text" name="video_url" value="{{ ex.video_url }}" style="width:300px;">
-    <button type="submit">Save</button>
-  </form>
-
-  <form action="{% url 'update_exercise_type' ex.id %}" method="post" style="margin-top:10px;">
-    {% csrf_token %}
-    <label>Type:</label>
-    <select name="exercise_type">
-      <option value="weight_reps" {% if ex.type == 'weight_reps' %}selected{% endif %}>Weight Reps</option>
-      <option value="bodyweight_reps" {% if ex.type == 'bodyweight_reps' %}selected{% endif %}>Bodyweight Reps</option>
-      <option value="weighted_bodyweight_reps" {% if ex.type == 'weighted_bodyweight_reps' %}selected{% endif %}>Weighted Bodyweight Reps</option>
-      <option value="timed_sets" {% if ex.type == 'timed_sets' %}selected{% endif %}>Timed Sets</option>
-    </select>
-    <button type="submit">Save</button>
-  </form>
-
-  <form action="{% url 'delete_exercise' ex.id %}" method="post" style="margin-top:10px;">
-    {% csrf_token %}
-    <button type="submit" style="color:red;">Delete Exercise</button>
-  </form>
+<div class="card exercise" id="exercise-{{ ex.id }}">
+  <h2>{{ ex.name_en|default:"Unnamed Exercise" }} ({{ ex.id }})</h2>
+  
+  <div class="image-container">
+    <img src="{{ ex.image_1 }}" class="exercise-image" alt="Image 1" onclick="setupImageCropper(this, '{{ ex.id }}', '1')">
+    <img src="{{ ex.image_2 }}" class="exercise-image" alt="Image 2" onclick="setupImageCropper(this, '{{ ex.id }}', '2')">
+    <p style="width:100%; font-size:13px; color:#666; margin-top:0;">Click on images to edit</p>
+  </div>
+  
+  <div class="tab-container">
+    <div class="tab-buttons">
+      <button class="tab-button active" onclick="showTab(event, 'basic-info-{{ ex.id }}')">Basic Info</button>
+      <button class="tab-button" onclick="showTab(event, 'details-{{ ex.id }}')">Details</button>
+      <button class="tab-button" onclick="showTab(event, 'muscles-{{ ex.id }}')">Muscles</button>
+      <button class="tab-button" onclick="showTab(event, 'instructions-{{ ex.id }}')">Instructions</button>
+    </div>
+    
+    <!-- Basic Info Tab -->
+    <div id="basic-info-{{ ex.id }}" class="tab-content active">
+      <div class="form-row">
+        <div class="form-group">
+          <label>ID:</label>
+          <div>{{ ex.id }}</div>
+        </div>
+        <div class="form-group">
+          <label>Added Count:</label>
+          <input type="number" id="added-count-{{ ex.id }}" value="{{ ex.added_count|default:0 }}" min="0" step="1">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'added_count', parseInt(document.getElementById('added-count-{{ ex.id }}').value, 10) || 0)">Save</button>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name (EN):</label>
+          <input type="text" id="name-en-{{ ex.id }}" value="{{ ex.name_en }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'name_en', document.getElementById('name-en-{{ ex.id }}').value)">Save</button>
+        </div>
+        <div class="form-group">
+          <label>Name (AR):</label>
+          <input type="text" id="name-ar-{{ ex.id }}" value="{{ ex.name_ar }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'name_ar', document.getElementById('name-ar-{{ ex.id }}').value)">Save</button>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Video URL:</label>
+        <input type="text" id="video-url-{{ ex.id }}" value="{{ ex.video_url }}">
+        <button type="button" onclick="saveVideoUrl('{{ ex.id }}')">Save</button>
+      </div>
+      
+      <div class="form-group">
+        <label>Type:</label>
+        <select id="exercise-type-{{ ex.id }}">
+          <option value="weight_reps" {% if ex.type == 'weight_reps' %}selected{% endif %}>Weight Reps</option>
+          <option value="bodyweight_reps" {% if ex.type == 'bodyweight_reps' %}selected{% endif %}>Bodyweight Reps</option>
+          <option value="weighted_bodyweight_reps" {% if ex.type == 'weighted_bodyweight_reps' %}selected{% endif %}>Weighted Bodyweight Reps</option>
+          <option value="timed_sets" {% if ex.type == 'timed_sets' %}selected{% endif %}>Timed Sets</option>
+        </select>
+        <button type="button" onclick="saveExerciseType('{{ ex.id }}')">Save</button>
+      </div>
+    </div>
+    
+    <!-- Details Tab -->
+    <div id="details-{{ ex.id }}" class="tab-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Category (EN):</label>
+          <input type="text" id="category-en-{{ ex.id }}" value="{{ ex.category_en }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'category_en', document.getElementById('category-en-{{ ex.id }}').value)">Save</button>
+        </div>
+        <div class="form-group">
+          <label>Category (AR):</label>
+          <input type="text" id="category-ar-{{ ex.id }}" value="{{ ex.category_ar }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'category_ar', document.getElementById('category-ar-{{ ex.id }}').value)">Save</button>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Equipment (EN):</label>
+          <input type="text" id="equipment-en-{{ ex.id }}" value="{{ ex.equipment_en }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'equipment_en', document.getElementById('equipment-en-{{ ex.id }}').value)">Save</button>
+        </div>
+        <div class="form-group">
+          <label>Equipment (AR):</label>
+          <input type="text" id="equipment-ar-{{ ex.id }}" value="{{ ex.equipment_ar }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'equipment_ar', document.getElementById('equipment-ar-{{ ex.id }}').value)">Save</button>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Force (EN):</label>
+          <input type="text" id="force-en-{{ ex.id }}" value="{{ ex.force_en }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'force_en', document.getElementById('force-en-{{ ex.id }}').value)">Save</button>
+        </div>
+        <div class="form-group">
+          <label>Force (AR):</label>
+          <input type="text" id="force-ar-{{ ex.id }}" value="{{ ex.force_ar }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'force_ar', document.getElementById('force-ar-{{ ex.id }}').value)">Save</button>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Level (EN):</label>
+          <input type="text" id="level-en-{{ ex.id }}" value="{{ ex.level_en }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'level_en', document.getElementById('level-en-{{ ex.id }}').value)">Save</button>
+        </div>
+        <div class="form-group">
+          <label>Level (AR):</label>
+          <input type="text" id="level-ar-{{ ex.id }}" value="{{ ex.level_ar }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'level_ar', document.getElementById('level-ar-{{ ex.id }}').value)">Save</button>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mechanic (EN):</label>
+          <input type="text" id="mechanic-en-{{ ex.id }}" value="{{ ex.mechanic_en }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'mechanic_en', document.getElementById('mechanic-en-{{ ex.id }}').value)">Save</button>
+        </div>
+        <div class="form-group">
+          <label>Mechanic (AR):</label>
+          <input type="text" id="mechanic-ar-{{ ex.id }}" value="{{ ex.mechanic_ar }}">
+          <button type="button" onclick="updateField('{{ ex.id }}', 'mechanic_ar', document.getElementById('mechanic-ar-{{ ex.id }}').value)">Save</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Muscles Tab -->
+    <div id="muscles-{{ ex.id }}" class="tab-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Primary Muscles (English):</label>
+          <div id="primary-muscles-en-list-{{ ex.id }}" class="list-container">
+            {% for muscle in ex.primaryMuscles_en %}
+            <div class="list-item">
+              <input type="text" value="{{ muscle }}" id="pm-en-{{ ex.id }}-{{ forloop.counter0 }}">
+              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'primaryMuscles_en', '{{ forloop.counter0 }}')">×</button>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-pm-en-{{ ex.id }}">
+            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'primaryMuscles_en', 'new-pm-en-{{ ex.id }}')">+</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Primary Muscles (Arabic):</label>
+          <div id="primary-muscles-ar-list-{{ ex.id }}" class="list-container">
+            {% for muscle in ex.primaryMuscles_ar %}
+            <div class="list-item">
+              <input type="text" value="{{ muscle }}" id="pm-ar-{{ ex.id }}-{{ forloop.counter0 }}">
+              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'primaryMuscles_ar', '{{ forloop.counter0 }}')">×</button>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-pm-ar-{{ ex.id }}">
+            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'primaryMuscles_ar', 'new-pm-ar-{{ ex.id }}')">+</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Secondary Muscles (English):</label>
+          <div id="secondary-muscles-en-list-{{ ex.id }}" class="list-container">
+            {% for muscle in ex.secondaryMuscles_en %}
+            <div class="list-item">
+              <input type="text" value="{{ muscle }}" id="sm-en-{{ ex.id }}-{{ forloop.counter0 }}">
+              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'secondaryMuscles_en', '{{ forloop.counter0 }}')">×</button>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-sm-en-{{ ex.id }}">
+            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'secondaryMuscles_en', 'new-sm-en-{{ ex.id }}')">+</button>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Secondary Muscles (Arabic):</label>
+          <div id="secondary-muscles-ar-list-{{ ex.id }}" class="list-container">
+            {% for muscle in ex.secondaryMuscles_ar %}
+            <div class="list-item">
+              <input type="text" value="{{ muscle }}" id="sm-ar-{{ ex.id }}-{{ forloop.counter0 }}">
+              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'secondaryMuscles_ar', '{{ forloop.counter0 }}')">×</button>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-sm-ar-{{ ex.id }}">
+            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'secondaryMuscles_ar', 'new-sm-ar-{{ ex.id }}')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Instructions Tab -->
+    <div id="instructions-{{ ex.id }}" class="tab-content">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Instructions (English):</label>
+          <div id="instructions-en-list-{{ ex.id }}" class="list-container">
+            {% for instruction in ex.instructions_en %}
+            <div class="list-item">
+              <input type="text" value="{{ instruction }}" id="inst-en-{{ ex.id }}-{{ forloop.counter0 }}">
+              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'instructions_en', '{{ forloop.counter0 }}')">×</button>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-inst-en-{{ ex.id }}">
+            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'instructions_en', 'new-inst-en-{{ ex.id }}')">+</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Instructions (Arabic):</label>
+          <div id="instructions-ar-list-{{ ex.id }}" class="list-container">
+            {% for instruction in ex.instructions_ar %}
+            <div class="list-item">
+              <input type="text" value="{{ instruction }}" id="inst-ar-{{ ex.id }}-{{ forloop.counter0 }}">
+              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'instructions_ar', '{{ forloop.counter0 }}')">×</button>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="list-item">
+            <input type="text" id="new-inst-ar-{{ ex.id }}">
+            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'instructions_ar', 'new-inst-ar-{{ ex.id }}')">+</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div style="margin-top:20px;">
+    <button class="delete-button" onclick="deleteExercise('{{ ex.id }}')">Delete Exercise</button>
+  </div>
 </div>
 {% endfor %}
+
+<!-- Image Crop Modal -->
+<div id="cropModal" class="modal">
+  <div class="modal-content">
+    <h3>Crop Image</h3>
+    <img id="cropImage" src="" alt="Image for cropping">
+    <div class="modal-buttons">
+      <button id="cropButton">Save Cropped Image</button>
+      <button id="cancelCropButton">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Include the Cropper.js library -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+<style>
+  /* General styling */
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+  }
+  
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-weight: 600;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+  }
+  
+  h2 {
+    color: #2980b9;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    color: #3498db;
+    font-weight: 500;
+    margin-bottom: 15px;
+  }
+  
+  /* Card styling */
+  .card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    padding: 25px;
+    margin-bottom: 30px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  }
+  
+  /* Form styling */
+  .form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #34495e;
+  }
+  
+  /* Input styling */
+  input, select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    transition: border 0.2s ease;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  }
+  
+  /* Button styling */
+  button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    border: none;
+    background-color: #3498db;
+    color: white;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
+  
+  button:hover {
+    background-color: #2980b9;
+  }
+  
+  .delete-button {
+    background-color: #e74c3c;
+  }
+  
+  .delete-button:hover {
+    background-color: #c0392b;
+  }
+  
+  .add-button {
+    background-color: #2ecc71;
+  }
+  
+  .add-button:hover {
+    background-color: #27ae60;
+  }
+  
+  /* Image styling */
+  .exercise-image {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    border: 2px solid #eee;
+    transition: transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  .exercise-image:hover {
+    transform: scale(1.03);
+    border-color: #3498db;
+  }
+  
+  /* Image container */
+  .image-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  
+  /* Tab styling for separating content */
+  .tab-container {
+    margin-bottom: 25px;
+  }
+  
+  .tab-buttons {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+  }
+  
+  .tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    color: #7f8c8d;
+    border-bottom: 2px solid transparent;
+  }
+  
+  .tab-button.active {
+    color: #3498db;
+    border-bottom: 2px solid #3498db;
+  }
+  
+  .tab-content {
+    display: none;
+    padding: 15px 0;
+  }
+  
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* List items styling */
+  .list-container {
+    margin-bottom: 15px;
+  }
+  
+  .list-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .list-item input {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  
+  .list-item button.remove-item {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+    padding: 0;
+  }
+  
+  .list-item button.remove-item:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Modal styling */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+  }
+  
+  .modal-content {
+    background-color: white;
+    margin: 5% auto;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    width: 80%;
+    max-width: 800px;
+  }
+  
+  #cropImage {
+    max-width: 100%;
+    max-height: 60vh;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  #cropButton {
+    background-color: #2ecc71;
+    margin-right: 10px;
+  }
+  
+  #cancelCropButton {
+    background-color: #e74c3c;
+  }
+</style>
+
+<script>
+let cropper;
+const cropModal = document.getElementById('cropModal');
+const cropImage = document.getElementById('cropImage');
+const cropButton = document.getElementById('cropButton');
+const cancelCropButton = document.getElementById('cancelCropButton');
+let currentImageElement;
+let currentExerciseId;
+let currentImageType;
+
+// Tab functionality
+function showTab(event, tabId) {
+    // Hide all tab contents
+    const tabContents = document.getElementsByClassName("tab-content");
+    for (let i = 0; i < tabContents.length; i++) {
+        if (tabContents[i].id.includes(tabId.split("-").pop())) {
+            tabContents[i].style.display = "none";
+        }
+    }
+    
+    // Remove active class from all tab buttons
+    const tabButtons = event.currentTarget.parentElement.getElementsByClassName("tab-button");
+    for (let i = 0; i < tabButtons.length; i++) {
+        tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+    }
+    
+    // Show the current tab and add an "active" class to the button that opened the tab
+    document.getElementById(tabId).style.display = "block";
+    event.currentTarget.className += " active";
+}
+
+// List Item Functions for New Exercise
+function addNewListItem(containerId, inputId) {
+    const container = document.getElementById(containerId);
+    const input = document.getElementById(inputId);
+    const value = input.value.trim();
+    
+    if (value) {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = "list-item";
+        
+        const itemInput = document.createElement("input");
+        itemInput.type = "text";
+        itemInput.value = value;
+        
+        const removeButton = document.createElement("button");
+        removeButton.className = "remove-item";
+        removeButton.textContent = "×";
+        removeButton.onclick = function() {
+            container.removeChild(itemDiv);
+        };
+        
+        itemDiv.appendChild(itemInput);
+        itemDiv.appendChild(removeButton);
+        container.appendChild(itemDiv);
+        
+        // Clear the input field
+        input.value = "";
+    }
+}
+
+// List Item Functions for Existing Exercise
+function addListItem(exerciseId, fieldName, inputId) {
+    const input = document.getElementById(inputId);
+    const value = input.value.trim();
+    
+    if (value) {
+        // Get the current array
+        let currentArray = [];
+        const listContainer = document.getElementById(`${fieldName.replace('_', '-')}-list-${exerciseId}`);
+        const inputElements = listContainer.querySelectorAll('input');
+        
+        inputElements.forEach(function(input) {
+            if (input.value.trim()) {
+                currentArray.push(input.value.trim());
+            }
+        });
+        
+        // Add the new value
+        currentArray.push(value);
+        
+        // Update the array in Firestore
+        updateArrayField(exerciseId, fieldName, currentArray);
+        
+        // Clear the input field
+        input.value = "";
+    }
+}
+
+function removeListItem(exerciseId, fieldName, index) {
+    // Convert index to a number to ensure correct comparison
+    index = parseInt(index);
+    
+    // Get the current array
+    let currentArray = [];
+    const listContainerId = `${fieldName.replace('_', '-')}-list-${exerciseId}`;
+    const listContainer = document.getElementById(listContainerId);
+    
+    if (!listContainer) {
+        console.error(`List container ${listContainerId} not found`);
+        return;
+    }
+    
+    const inputElements = listContainer.querySelectorAll('input');
+    
+    // Skip the item to be removed
+    inputElements.forEach(function(input, i) {
+        if (i !== index && input.value.trim()) {
+            currentArray.push(input.value.trim());
+        }
+    });
+    
+    // Update the array in Firestore
+    updateArrayField(exerciseId, fieldName, currentArray);
+}
+
+function updateArrayField(exerciseId, fieldName, valueArray) {
+    // Validate inputs
+    if (!exerciseId || !fieldName || !Array.isArray(valueArray)) {
+        console.error('Invalid inputs to updateArrayField:', { exerciseId, fieldName, valueArray });
+        alert('Error: Invalid data for update');
+        return;
+    }
+
+    const data = {};
+    data[fieldName] = valueArray;
+    
+    fetch(`/portal/exercises/${exerciseId}/update_array/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Reload the page to show updated values
+            window.location.reload();
+        } else {
+            alert(`Error updating ${fieldName}: ` + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error updating array field:', error);
+        alert(`Failed to update ${fieldName}: ${error.message}`);
+    });
+}
+
+// Image cropper functions
+function setupImageCropper(imageElement, exerciseId, imageType) {
+    const imageSrc = imageElement.src;
+    currentImageElement = imageElement;
+    currentExerciseId = exerciseId;
+    currentImageType = imageType;
+    openCropModal(imageSrc);
+}
+
+function openCropModal(imageSrc) {
+    if (cropper) {
+        cropper.destroy();
+    }
+
+    cropImage.src = imageSrc;
+    cropModal.style.display = 'block';
+
+    cropper = new Cropper(cropImage, {
+        aspectRatio: 3 / 2,
+        viewMode: 1,
+        ready() {
+            cropper.setData({ width: 300, height: 200 });
+        }
+    });
+}
+
+cropButton.addEventListener('click', () => {
+    const croppedCanvas = cropper.getCroppedCanvas();
+    croppedCanvas.toBlob((blob) => {
+        const formData = new FormData();
+        formData.append('image', blob, 'cropped.jpg');
+        formData.append('exercise_name', currentExerciseId);
+        formData.append('image_type', currentImageType);
+
+        fetch('{% url "upload_exercise_image" %}', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                currentImageElement.src = data.newImageUrl;
+                cropModal.style.display = 'none';
+            } else {
+                alert('Error uploading cropped image: ' + (data.error || 'Unknown error'));
+            }
+        });
+    });
+});
+
+cancelCropButton.addEventListener('click', () => {
+    if (cropper) {
+        cropper.destroy();
+    }
+    cropModal.style.display = 'none';
+});
+
+function deleteExercise(exerciseId) {
+    if (confirm('Are you sure you want to delete this exercise?')) {
+        fetch(`/portal/exercises/${exerciseId}/delete/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById(`exercise-${exerciseId}`).remove();
+            } else {
+                alert('Error deleting exercise');
+            }
+        });
+    }
+}
+
+function saveVideoUrl(exerciseId) {
+    const videoUrl = document.getElementById(`video-url-${exerciseId}`).value;
+
+    fetch(`/portal/exercises/${exerciseId}/update_video_url/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            video_url: videoUrl
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Video URL updated successfully');
+        } else {
+            alert('Error updating video URL');
+        }
+    });
+}
+
+function saveExerciseType(exerciseId) {
+    const exerciseType = document.getElementById(`exercise-type-${exerciseId}`).value;
+
+    fetch(`/portal/exercises/${exerciseId}/update_type/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            exercise_type: exerciseType
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Exercise type updated successfully');
+        } else {
+            alert('Error updating exercise type');
+        }
+    });
+}
+
+function updateField(exerciseId, fieldName, value) {
+    const data = {};
+    
+    // Convert numeric fields to proper numbers
+    if (fieldName === 'added_count') {
+        // Parse the value as an integer
+        data[fieldName] = parseInt(value, 10) || 0;
+    } else {
+        data[fieldName] = value;
+    }
+    
+    fetch(`/portal/exercises/${exerciseId}/update_field/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`${fieldName} updated successfully`);
+        } else {
+            alert(`Error updating ${fieldName}: ` + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error updating field:', error);
+        alert(`Failed to update ${fieldName}: ${error.message}`);
+    });
+}
+
+function createExercise() {
+    const id = document.getElementById('new-exercise-id').value.trim();
+    const nameEn = document.getElementById('new-exercise-name').value.trim();
+    const nameAr = document.getElementById('new-exercise-name-ar').value.trim();
+    const categoryEn = document.getElementById('new-exercise-category-en').value.trim();
+    const categoryAr = document.getElementById('new-exercise-category-ar').value.trim();
+    const equipmentEn = document.getElementById('new-exercise-equipment-en').value.trim();
+    const equipmentAr = document.getElementById('new-exercise-equipment-ar').value.trim();
+    const forceEn = document.getElementById('new-exercise-force-en').value.trim();
+    const forceAr = document.getElementById('new-exercise-force-ar').value.trim();
+    const levelEn = document.getElementById('new-exercise-level-en').value.trim();
+    const levelAr = document.getElementById('new-exercise-level-ar').value.trim();
+    const mechanicEn = document.getElementById('new-exercise-mechanic-en').value.trim();
+    const mechanicAr = document.getElementById('new-exercise-mechanic-ar').value.trim();
+    const type = document.getElementById('new-exercise-type').value;
+    const videoUrl = document.getElementById('new-exercise-video-url').value.trim();
+    
+    if (!id || !nameEn) {
+        alert('Exercise ID and Name (English) are required');
+        return;
+    }
+    
+    // Get primary muscles from list items
+    const primaryMusclesEnList = document.getElementById('new-primary-muscles-en-list');
+    const primaryMusclesEn = Array.from(primaryMusclesEnList.querySelectorAll('input')).map(input => input.value.trim()).filter(val => val !== '');
+    
+    const primaryMusclesArList = document.getElementById('new-primary-muscles-ar-list');
+    const primaryMusclesAr = Array.from(primaryMusclesArList.querySelectorAll('input')).map(input => input.value.trim()).filter(val => val !== '');
+    
+    // Get secondary muscles from list items
+    const secondaryMusclesEnList = document.getElementById('new-secondary-muscles-en-list');
+    const secondaryMusclesEn = Array.from(secondaryMusclesEnList.querySelectorAll('input')).map(input => input.value.trim()).filter(val => val !== '');
+    
+    const secondaryMusclesArList = document.getElementById('new-secondary-muscles-ar-list');
+    const secondaryMusclesAr = Array.from(secondaryMusclesArList.querySelectorAll('input')).map(input => input.value.trim()).filter(val => val !== '');
+    
+    // Get instructions from list items
+    const instructionsEnList = document.getElementById('new-instructions-en-list');
+    const instructionsEn = Array.from(instructionsEnList.querySelectorAll('input')).map(input => input.value.trim()).filter(val => val !== '');
+    
+    const instructionsArList = document.getElementById('new-instructions-ar-list');
+    const instructionsAr = Array.from(instructionsArList.querySelectorAll('input')).map(input => input.value.trim()).filter(val => val !== '');
+    
+    const exerciseData = {
+        id: id,
+        name_en: nameEn,
+        name_ar: nameAr,
+        category_en: categoryEn,
+        category_ar: categoryAr,
+        equipment_en: equipmentEn,
+        equipment_ar: equipmentAr,
+        force_en: forceEn,
+        force_ar: forceAr,
+        level_en: levelEn,
+        level_ar: levelAr,
+        mechanic_en: mechanicEn,
+        mechanic_ar: mechanicAr,
+        primaryMuscles_en: primaryMusclesEn,
+        primaryMuscles_ar: primaryMusclesAr,
+        secondaryMuscles_en: secondaryMusclesEn,
+        secondaryMuscles_ar: secondaryMusclesAr,
+        instructions_en: instructionsEn,
+        instructions_ar: instructionsAr,
+        type: type,
+        video_url: videoUrl,
+        added_count: 0
+    };
+    
+    fetch('{% url "create_exercise" %}', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(exerciseData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Exercise created successfully');
+            // Reload the page to show the new exercise
+            window.location.reload();
+        } else {
+            alert('Error creating exercise: ' + (data.error || 'Unknown error'));
+        }
+    });
+}
+</script>
