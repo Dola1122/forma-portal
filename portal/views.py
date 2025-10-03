@@ -1,6 +1,11 @@
 from django.shortcuts import render
-from .firebase_utils import get_users_with_subcollections
-from .firebase_utils import get_exercises, update_exercise, delete_exercise
+from .firebase_utils import (
+    get_users_with_subcollections,
+    get_exercises,
+    update_exercise,
+    delete_exercise,
+    sanitize_exercise_payload,
+)
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from firebase_admin import firestore, storage
@@ -18,15 +23,25 @@ def exercises_view(request):
 def update_exercise_type(request, ex_id):
     if request.method == "POST":
         new_type = request.POST.get("exercise_type")
-        update_exercise(ex_id, {"type": new_type})
-        return JsonResponse({"success": True})
+        try:
+            update_exercise(ex_id, {"type": new_type})
+            return JsonResponse({"success": True})
+        except ValueError as e:
+            return JsonResponse({"success": False, "error": str(e)})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
     return JsonResponse({"success": False})
 
 def update_video_url(request, ex_id):
     if request.method == "POST":
         new_url = request.POST.get("video_url")
-        update_exercise(ex_id, {"video_url": new_url})
-        return JsonResponse({"success": True})
+        try:
+            update_exercise(ex_id, {"video_url": new_url})
+            return JsonResponse({"success": True})
+        except ValueError as e:
+            return JsonResponse({"success": False, "error": str(e)})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
     return JsonResponse({"success": False})
 
 def delete_exercise_view(request, ex_id):
@@ -66,9 +81,7 @@ def upload_exercise_image(request):
 
             # Update Firestore with new image URL
             field_name = f"image_{image_type}"
-            db.collection("exerciseData").document(exercise_name).update({
-                field_name: public_url
-            })
+            update_exercise(exercise_name, {field_name: public_url})
 
             return JsonResponse({"success": True, "newImageUrl": public_url})
         except Exception as e:
@@ -101,9 +114,15 @@ def create_exercise(request):
             exercise_id = data.get('id')
             if not exercise_id:
                 return JsonResponse({"success": False, "error": "Exercise ID is required"})
-                
+            exercise_id = str(exercise_id).strip()
+            if not exercise_id:
+                return JsonResponse({"success": False, "error": "Exercise ID is required"})
+
+            sanitized_payload = sanitize_exercise_payload(data, apply_defaults=True, include_unknown=False)
+            sanitized_payload["id"] = exercise_id
+
             # Store the exercise document
-            db.collection("exerciseData").document(exercise_id).set(data)
+            db.collection("exerciseData").document(exercise_id).set(sanitized_payload)
             return JsonResponse({"success": True, "id": exercise_id})
         except Exception as e:
             import traceback
@@ -124,29 +143,26 @@ def update_field(request, ex_id):
             if request.content_type == 'application/json':
                 data = json.loads(request.body.decode('utf-8'))
                 
-                # Convert added_count to integer if it exists
-                if 'added_count' in data:
-                    try:
-                        data['added_count'] = int(data['added_count'])
-                    except (ValueError, TypeError):
-                        data['added_count'] = 0
-                
-                update_exercise(ex_id, data)
-                return JsonResponse({"success": True})
+                try:
+                    update_exercise(ex_id, data)
+                    return JsonResponse({"success": True})
+                except ValueError as e:
+                    return JsonResponse({"success": False, "error": str(e)})
+                except Exception as e:
+                    print(f"Error updating field: {str(e)}")
+                    return JsonResponse({"success": False, "error": str(e)})
             else:
                 # Handle form data
                 field = next(iter(request.POST))
                 value = request.POST.get(field)
-                
-                # Convert added_count to integer if needed
-                if field == 'added_count':
-                    try:
-                        value = int(value)
-                    except (ValueError, TypeError):
-                        value = 0
-                
-                update_exercise(ex_id, {field: value})
-                return JsonResponse({"success": True})
+                try:
+                    update_exercise(ex_id, {field: value})
+                    return JsonResponse({"success": True})
+                except ValueError as e:
+                    return JsonResponse({"success": False, "error": str(e)})
+                except Exception as e:
+                    print(f"Error updating field: {str(e)}")
+                    return JsonResponse({"success": False, "error": str(e)})
         except Exception as e:
             print(f"Error updating field: {str(e)}")
             return JsonResponse({"success": False, "error": str(e)})
@@ -162,8 +178,14 @@ def update_array(request, ex_id):
         try:
             import json
             data = json.loads(request.body.decode('utf-8'))
-            update_exercise(ex_id, data)
-            return JsonResponse({"success": True})
+            try:
+                update_exercise(ex_id, data)
+                return JsonResponse({"success": True})
+            except ValueError as e:
+                return JsonResponse({"success": False, "error": str(e)})
+            except Exception as e:
+                print(f"Error updating array field: {str(e)}")
+                return JsonResponse({"success": False, "error": str(e)})
         except Exception as e:
             print(f"Error updating array field: {str(e)}")
             return JsonResponse({"success": False, "error": str(e)})

@@ -1,26 +1,84 @@
 <h1>Exercises</h1>
 
-<!-- Create New Exercise Form -->
-<div class="card">
-  <h3>Create New Exercise</h3>
-  
-  <div class="tab-container">
-    <div class="tab-buttons">
-      <button class="tab-button active" onclick="showTab(event, 'new-basic-info')">Basic Info</button>
-      <button class="tab-button" onclick="showTab(event, 'new-details')">Details</button>
-      <button class="tab-button" onclick="showTab(event, 'new-muscles')">Muscles</button>
-      <button class="tab-button" onclick="showTab(event, 'new-instructions')">Instructions</button>
+<!-- Filter Controls -->
+<div class="filter-container card">
+  <h3>Filter Exercises <span class="keyboard-shortcut" title="Keyboard shortcut">Shift+F</span></h3>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="filter-name">Name Contains</label>
+      <input type="text" id="filter-name" placeholder="Search by name">
     </div>
-    
-    <!-- Basic Info Tab -->
-    <div id="new-basic-info" class="tab-content active">
+    <div class="form-group">
+      <label for="filter-type">Exercise Type</label>
+      <select id="filter-type">
+        <option value="">All Types</option>
+        <option value="weight_reps">Weight & Reps</option>
+        <option value="bodyweight_reps">Bodyweight Reps</option>
+        <option value="weighted_bodyweight_reps">Weighted Bodyweight Reps</option>
+        <option value="timed_sets">Timed Sets</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="filter-category">Category</label>
+      <input type="text" id="filter-category" placeholder="Filter by category">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label for="filter-muscles">Muscles</label>
+      <input type="text" id="filter-muscles" placeholder="Filter by muscles">
+    </div>
+    <div class="form-group">
+      <button id="clear-filters" class="secondary-button">Clear Filters</button>
+      <span id="exercise-count" style="margin-left: 10px; font-weight: bold;"></span>
+    </div>
+  </div>
+  
+  <!-- Batch Operations -->
+  <div class="batch-operations" style="margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd;">
+    <h4 style="margin-top: 0; margin-bottom: 10px;">Batch Operations</h4>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="batch-field">Field</label>
+        <select id="batch-field">
+          <option value="">Select Field</option>
+          <option value="category_en">Category (EN)</option>
+          <option value="category_ar">Category (AR)</option>
+          <option value="equipment_en">Equipment (EN)</option>
+          <option value="equipment_ar">Equipment (AR)</option>
+          <option value="force_en">Force (EN)</option>
+          <option value="force_ar">Force (AR)</option>
+          <option value="level_en">Level (EN)</option>
+          <option value="level_ar">Level (AR)</option>
+          <option value="mechanic_en">Mechanic (EN)</option>
+          <option value="mechanic_ar">Mechanic (AR)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="batch-value">Value</label>
+        <input type="text" id="batch-value" placeholder="Value to apply">
+      </div>
+      <div class="form-group" style="align-self: flex-end;">
+        <button onclick="applyBatchOperation()" class="secondary-button">Apply to Filtered Exercises</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create New Exercise Form -->
+<div class="card create-form">
+  <h3>Create New Exercise <span class="keyboard-shortcut" title="Keyboard shortcut">Shift+N</span></h3>
+  
+  <form id="new-exercise-form">
+    <div class="form-section">
+      <h4 class="section-title">Basic Information</h4>
       <div class="form-row">
         <div class="form-group">
-          <label for="new-exercise-id">Exercise ID:</label>
-          <input type="text" id="new-exercise-id">
+          <label for="new-exercise-id">Exercise ID <span class="required">*</span></label>
+          <input type="text" id="new-exercise-id" placeholder="Unique identifier" required>
         </div>
         <div class="form-group">
-          <label for="new-exercise-type">Exercise Type:</label>
+          <label for="new-exercise-type">Exercise Type <span class="required">*</span></label>
           <select id="new-exercise-type">
             <option value="weight_reps">Weight Reps</option>
             <option value="bodyweight_reps">Bodyweight Reps</option>
@@ -32,367 +90,473 @@
       
       <div class="form-row">
         <div class="form-group">
-          <label for="new-exercise-name">Name (English):</label>
-          <input type="text" id="new-exercise-name">
+          <label for="new-exercise-name">Name (English) <span class="required">*</span></label>
+          <input type="text" id="new-exercise-name" placeholder="Exercise name in English" required>
         </div>
         <div class="form-group">
-          <label for="new-exercise-name-ar">Name (Arabic):</label>
-          <input type="text" id="new-exercise-name-ar">
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label for="new-exercise-video-url">Video URL (optional):</label>
-        <input type="text" id="new-exercise-video-url">
-      </div>
-    </div>
-    
-    <!-- Details Tab -->
-    <div id="new-details" class="tab-content">
-      <div class="form-row">
-        <div class="form-group">
-          <label for="new-exercise-category-en">Category (English):</label>
-          <input type="text" id="new-exercise-category-en">
-        </div>
-        <div class="form-group">
-          <label for="new-exercise-category-ar">Category (Arabic):</label>
-          <input type="text" id="new-exercise-category-ar">
+          <label for="new-exercise-name-ar">Name (Arabic)</label>
+          <input type="text" id="new-exercise-name-ar" placeholder="Exercise name in Arabic">
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
-          <label for="new-exercise-equipment-en">Equipment (English):</label>
-          <input type="text" id="new-exercise-equipment-en">
+          <label for="new-exercise-category-en">Category (English)</label>
+          <input type="text" id="new-exercise-category-en" placeholder="Category in English">
         </div>
         <div class="form-group">
-          <label for="new-exercise-equipment-ar">Equipment (Arabic):</label>
-          <input type="text" id="new-exercise-equipment-ar">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="new-exercise-force-en">Force (English):</label>
-          <input type="text" id="new-exercise-force-en">
-        </div>
-        <div class="form-group">
-          <label for="new-exercise-force-ar">Force (Arabic):</label>
-          <input type="text" id="new-exercise-force-ar">
+          <label for="new-exercise-category-ar">Category (Arabic)</label>
+          <input type="text" id="new-exercise-category-ar" placeholder="Category in Arabic">
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
-          <label for="new-exercise-level-en">Level (English):</label>
-          <input type="text" id="new-exercise-level-en">
-        </div>
-        <div class="form-group">
-          <label for="new-exercise-level-ar">Level (Arabic):</label>
-          <input type="text" id="new-exercise-level-ar">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-group">
-          <label for="new-exercise-mechanic-en">Mechanic (English):</label>
-          <input type="text" id="new-exercise-mechanic-en">
-        </div>
-        <div class="form-group">
-          <label for="new-exercise-mechanic-ar">Mechanic (Arabic):</label>
-          <input type="text" id="new-exercise-mechanic-ar">
+          <label for="new-exercise-video-url">Video URL</label>
+          <input type="url" id="new-exercise-video-url" placeholder="YouTube or other video URL">
         </div>
       </div>
     </div>
     
-    <!-- Muscles Tab -->
-    <div id="new-muscles" class="tab-content">
+    <div class="form-section">
+      <h4 class="section-title">Classification Details</h4>
       <div class="form-row">
         <div class="form-group">
-          <label>Primary Muscles (English):</label>
-          <div id="new-primary-muscles-en-list" class="list-container">
-            <!-- Dynamically added items will appear here -->
-          </div>
-          <div class="list-item">
-            <input type="text" id="new-primary-muscle-en-input">
-            <button class="add-button" onclick="addNewListItem('new-primary-muscles-en-list', 'new-primary-muscle-en-input')">+</button>
-          </div>
+          <label for="new-exercise-equipment-en">Equipment (English)</label>
+          <input type="text" id="new-exercise-equipment-en" placeholder="Equipment in English">
         </div>
-        
         <div class="form-group">
-          <label>Primary Muscles (Arabic):</label>
-          <div id="new-primary-muscles-ar-list" class="list-container">
-            <!-- Dynamically added items will appear here -->
-          </div>
-          <div class="list-item">
-            <input type="text" id="new-primary-muscle-ar-input">
-            <button class="add-button" onclick="addNewListItem('new-primary-muscles-ar-list', 'new-primary-muscle-ar-input')">+</button>
-          </div>
+          <label for="new-exercise-equipment-ar">Equipment (Arabic)</label>
+          <input type="text" id="new-exercise-equipment-ar" placeholder="Equipment in Arabic">
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
-          <label>Secondary Muscles (English):</label>
-          <div id="new-secondary-muscles-en-list" class="list-container">
-            <!-- Dynamically added items will appear here -->
-          </div>
-          <div class="list-item">
-            <input type="text" id="new-secondary-muscle-en-input">
-            <button class="add-button" onclick="addNewListItem('new-secondary-muscles-en-list', 'new-secondary-muscle-en-input')">+</button>
-          </div>
+          <label for="new-exercise-force-en">Force (English)</label>
+          <input type="text" id="new-exercise-force-en" placeholder="Force in English">
         </div>
-        
         <div class="form-group">
-          <label>Secondary Muscles (Arabic):</label>
-          <div id="new-secondary-muscles-ar-list" class="list-container">
-            <!-- Dynamically added items will appear here -->
-          </div>
-          <div class="list-item">
-            <input type="text" id="new-secondary-muscle-ar-input">
-            <button class="add-button" onclick="addNewListItem('new-secondary-muscles-ar-list', 'new-secondary-muscle-ar-input')">+</button>
-          </div>
+          <label for="new-exercise-force-ar">Force (Arabic)</label>
+          <input type="text" id="new-exercise-force-ar" placeholder="Force in Arabic">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-level-en">Level (English)</label>
+          <input type="text" id="new-exercise-level-en" placeholder="Level in English">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-level-ar">Level (Arabic)</label>
+          <input type="text" id="new-exercise-level-ar" placeholder="Level in Arabic">
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label for="new-exercise-mechanic-en">Mechanic (English)</label>
+          <input type="text" id="new-exercise-mechanic-en" placeholder="Mechanic in English">
+        </div>
+        <div class="form-group">
+          <label for="new-exercise-mechanic-ar">Mechanic (Arabic)</label>
+          <input type="text" id="new-exercise-mechanic-ar" placeholder="Mechanic in Arabic">
         </div>
       </div>
     </div>
     
-    <!-- Instructions Tab -->
-    <div id="new-instructions" class="tab-content">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Instructions (English):</label>
-          <div id="new-instructions-en-list" class="list-container">
-            <!-- Dynamically added items will appear here -->
+    <div class="form-section">
+      <h4 class="section-title">Muscles & Instructions</h4>
+      
+      <!-- Primary Muscles Section -->
+      <div class="subsection">
+        <h5>Primary Muscles</h5>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Primary Muscles (English)</label>
+            <div class="input-with-action">
+              <input type="text" id="new-primary-muscle-en-input" placeholder="Add primary muscle">
+              <button type="button" class="action-button" onclick="addNewListItem('new-primary-muscles-en-list', 'new-primary-muscle-en-input')">+</button>
+            </div>
+            <div class="list-container" id="new-primary-muscles-en-list"></div>
           </div>
-          <div class="list-item">
-            <input type="text" id="new-instruction-en-input">
-            <button class="add-button" onclick="addNewListItem('new-instructions-en-list', 'new-instruction-en-input')">+</button>
+          <div class="form-group">
+            <label>Primary Muscles (Arabic)</label>
+            <div class="input-with-action">
+              <input type="text" id="new-primary-muscle-ar-input" placeholder="Add primary muscle">
+              <button type="button" class="action-button" onclick="addNewListItem('new-primary-muscles-ar-list', 'new-primary-muscle-ar-input')">+</button>
+            </div>
+            <div class="list-container" id="new-primary-muscles-ar-list"></div>
           </div>
         </div>
       </div>
       
-      <div class="form-row">
-        <div class="form-group">
-          <label>Instructions (Arabic):</label>
-          <div id="new-instructions-ar-list" class="list-container">
-            <!-- Dynamically added items will appear here -->
+      <!-- Secondary Muscles Section -->
+      <div class="subsection">
+        <h5>Secondary Muscles</h5>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Secondary Muscles (English)</label>
+            <div class="input-with-action">
+              <input type="text" id="new-secondary-muscle-en-input" placeholder="Add secondary muscle">
+              <button type="button" class="action-button" onclick="addNewListItem('new-secondary-muscles-en-list', 'new-secondary-muscle-en-input')">+</button>
+            </div>
+            <div class="list-container" id="new-secondary-muscles-en-list"></div>
           </div>
-          <div class="list-item">
-            <input type="text" id="new-instruction-ar-input">
-            <button class="add-button" onclick="addNewListItem('new-instructions-ar-list', 'new-instruction-ar-input')">+</button>
+          <div class="form-group">
+            <label>Secondary Muscles (Arabic)</label>
+            <div class="input-with-action">
+              <input type="text" id="new-secondary-muscle-ar-input" placeholder="Add secondary muscle">
+              <button type="button" class="action-button" onclick="addNewListItem('new-secondary-muscles-ar-list', 'new-secondary-muscle-ar-input')">+</button>
+            </div>
+            <div class="list-container" id="new-secondary-muscles-ar-list"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Instructions Section -->
+      <div class="subsection">
+        <h5>Instructions</h5>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Instructions (English)</label>
+            <div class="input-with-action">
+              <input type="text" id="new-instruction-en-input" placeholder="Add instruction step">
+              <button type="button" class="action-button" onclick="addNewListItem('new-instructions-en-list', 'new-instruction-en-input')">+</button>
+            </div>
+            <div class="list-container" id="new-instructions-en-list"></div>
+          </div>
+          <div class="form-group">
+            <label>Instructions (Arabic)</label>
+            <div class="input-with-action">
+              <input type="text" id="new-instruction-ar-input" placeholder="Add instruction step">
+              <button type="button" class="action-button" onclick="addNewListItem('new-instructions-ar-list', 'new-instruction-ar-input')">+</button>
+            </div>
+            <div class="list-container" id="new-instructions-ar-list"></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </form>
   
-  <button onclick="createExercise()" class="add-button">Create Exercise</button>
+  <div class="form-actions">
+    <button onclick="createExercise()" class="add-button">Create Exercise</button>
+    <button type="button" onclick="clearNewExerciseForm()" class="secondary-button">Clear Form</button>
+  </div>
 </div>
 
-{% for ex in exercises %}
-<div class="card exercise" id="exercise-{{ ex.id }}">
-  <h2>{{ ex.name_en|default:"Unnamed Exercise" }} ({{ ex.id }})</h2>
-  
-  <div class="image-container">
-    <img src="{{ ex.image_1 }}" class="exercise-image" alt="Image 1" onclick="setupImageCropper(this, '{{ ex.id }}', '1')">
-    <img src="{{ ex.image_2 }}" class="exercise-image" alt="Image 2" onclick="setupImageCropper(this, '{{ ex.id }}', '2')">
-    <p style="width:100%; font-size:13px; color:#666; margin-top:0;">Click on images to edit</p>
+<!-- Exercise List -->
+<div class="exercises-container">
+  <div class="exercise-controls">
+    <div class="exercise-count">
+      <div>Showing <span id="visible-count">0</span> of <span id="total-count">{{ exercises|length }}</span> exercises</div>
+      <div class="completion-status">
+        <div class="progress-bar">
+          <div id="completion-progress" class="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="completion-text">
+          <span id="completion-percentage">0%</span> complete
+          (<span id="complete-count">0</span>/<span id="total-exercises">{{ exercises|length }}</span> exercises fully populated)
+        </div>
+      </div>
+    </div>
+    <div class="batch-actions">
+      <button id="expand-all-btn" class="secondary-button" onclick="toggleAllCards(true)" title="Expand all exercise cards (Shift+E)">Expand All</button>
+      <button id="collapse-all-btn" class="secondary-button" onclick="toggleAllCards(false)" title="Collapse all exercise cards (Shift+C)">Collapse All</button>
+      <button id="check-completeness-btn" class="secondary-button" onclick="checkExerciseCompleteness()" title="Check completeness of all exercises">Check Completeness</button>
+    </div>
   </div>
   
-  <div class="tab-container">
-    <div class="tab-buttons">
-      <button class="tab-button active" onclick="showTab(event, 'basic-info-{{ ex.id }}')">Basic Info</button>
-      <button class="tab-button" onclick="showTab(event, 'details-{{ ex.id }}')">Details</button>
-      <button class="tab-button" onclick="showTab(event, 'muscles-{{ ex.id }}')">Muscles</button>
-      <button class="tab-button" onclick="showTab(event, 'instructions-{{ ex.id }}')">Instructions</button>
+  {% for ex in exercises %}
+  <div class="card exercise" id="exercise-{{ ex.id }}" data-name="{{ ex.name_en|default:"" }}" data-type="{{ ex.type|default:"" }}" data-category="{{ ex.category_en|default:"" }}" data-primary-muscles="{{ ex.primaryMuscles_en|join:" " }}" data-secondary-muscles="{{ ex.secondaryMuscles_en|join:" " }}" tabindex="0">
+    <div class="card-header">
+      <h2>
+        {{ ex.name_en|default:"Unnamed Exercise" }} ({{ ex.id }})
+        <span class="status-indicators">
+          {% if ex.image_1 %}<span class="status-dot green" title="Has primary image">📷</span>{% else %}<span class="status-dot red" title="Missing primary image">📷</span>{% endif %}
+          {% if ex.primaryMuscles_en %}<span class="status-dot green" title="Has primary muscles">💪</span>{% else %}<span class="status-dot red" title="Missing primary muscles">💪</span>{% endif %}
+          {% if ex.instructions_en %}<span class="status-dot green" title="Has instructions">📝</span>{% else %}<span class="status-dot red" title="Missing instructions">📝</span>{% endif %}
+        </span>
+      </h2>
+      <div class="card-actions">
+        <button class="quick-edit-btn" onclick="quickEditMode('{{ ex.id }}')" title="Quick edit mode (Press 'Q' when card is focused)">Quick Edit</button>
+        <button class="toggle-card" onclick="toggleExerciseCard('{{ ex.id }}')" title="Toggle card (Press Space when card is focused)">▼</button>
+      </div>
     </div>
+    <div class="card-content" id="content-{{ ex.id }}">
+  
+  <div class="form-section media-section">
+    <h4 class="section-title">Exercise Media</h4>
+    <div class="image-container">
+      <div class="media-item">
+        <div class="image-editor-container">
+          {% if ex.image_1 %}
+            <img src="{{ ex.image_1 }}" class="exercise-image" alt="Primary Image" onclick="setupImageCropper(this, '{{ ex.id }}', '1')">
+            <div class="image-overlay">
+              <button class="image-edit-btn" title="Edit Image" onclick="setupImageCropper(document.querySelector('#content-{{ ex.id }} img[alt=\'Primary Image\']'), '{{ ex.id }}', '1')">
+                <i class="fas fa-crop-alt"></i> Edit
+              </button>
+              <button class="image-upload-btn" title="Upload New Image" onclick="triggerFileUpload('{{ ex.id }}', '1')">
+                <i class="fas fa-upload"></i> Replace
+              </button>
+            </div>
+          {% else %}
+            <div class="empty-image-container" onclick="triggerFileUpload('{{ ex.id }}', '1')">
+              <i class="fas fa-image"></i>
+              <p>Upload Primary Image</p>
+            </div>
+          {% endif %}
+        </div>
+        <p class="media-label">Primary Image</p>
+      </div>
+      <div class="media-item">
+        <div class="image-editor-container">
+          {% if ex.image_2 %}
+            <img src="{{ ex.image_2 }}" class="exercise-image" alt="Secondary Image" onclick="setupImageCropper(this, '{{ ex.id }}', '2')">
+            <div class="image-overlay">
+              <button class="image-edit-btn" title="Edit Image" onclick="setupImageCropper(document.querySelector('#content-{{ ex.id }} img[alt=\'Secondary Image\']'), '{{ ex.id }}', '2')">
+                <i class="fas fa-crop-alt"></i> Edit
+              </button>
+              <button class="image-upload-btn" title="Upload New Image" onclick="triggerFileUpload('{{ ex.id }}', '2')">
+                <i class="fas fa-upload"></i> Replace
+              </button>
+            </div>
+          {% else %}
+            <div class="empty-image-container" onclick="triggerFileUpload('{{ ex.id }}', '2')">
+              <i class="fas fa-image"></i>
+              <p>Upload Secondary Image</p>
+            </div>
+          {% endif %}
+        </div>
+        <p class="media-label">Secondary Image</p>
+      </div>
+      <div class="media-item">
+        <div class="video-url-container">
+          <label for="video-url-{{ ex.id }}">Video URL:</label>
+          <input type="url" id="video-url-{{ ex.id }}" value="{{ ex.video_url }}" class="video-url-input">
+          <button class="small-button" onclick="saveVideoUrl('{{ ex.id }}')">Save URL</button>
+        </div>
+      </div>
+    </div>
+  </div>
     
-    <!-- Basic Info Tab -->
-    <div id="basic-info-{{ ex.id }}" class="tab-content active">
+    <div class="form-section">
+      <h4 class="section-title">Basic Information</h4>
       <div class="form-row">
         <div class="form-group">
           <label>ID:</label>
-          <div>{{ ex.id }}</div>
+          <div class="field-value">{{ ex.id }}</div>
         </div>
         <div class="form-group">
-          <label>Added Count:</label>
-          <input type="number" id="added-count-{{ ex.id }}" value="{{ ex.added_count|default:0 }}" min="0" step="1">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'added_count', parseInt(document.getElementById('added-count-{{ ex.id }}').value, 10) || 0)">Save</button>
+          <label>Type:</label>
+          <div class="input-with-action">
+            <select id="exercise-type-{{ ex.id }}">
+              <option value="weight_reps" {% if ex.type == 'weight_reps' %}selected{% endif %}>Weight Reps</option>
+              <option value="bodyweight_reps" {% if ex.type == 'bodyweight_reps' %}selected{% endif %}>Bodyweight Reps</option>
+              <option value="weighted_bodyweight_reps" {% if ex.type == 'weighted_bodyweight_reps' %}selected{% endif %}>Weighted Bodyweight Reps</option>
+              <option value="timed_sets" {% if ex.type == 'timed_sets' %}selected{% endif %}>Timed Sets</option>
+            </select>
+            <button type="button" class="action-button" onclick="saveExerciseType('{{ ex.id }}')">Save</button>
+          </div>
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
           <label>Name (EN):</label>
-          <input type="text" id="name-en-{{ ex.id }}" value="{{ ex.name_en }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'name_en', document.getElementById('name-en-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="name-en-{{ ex.id }}" value="{{ ex.name_en }}" placeholder="Exercise name in English">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'name_en', document.getElementById('name-en-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Name (AR):</label>
-          <input type="text" id="name-ar-{{ ex.id }}" value="{{ ex.name_ar }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'name_ar', document.getElementById('name-ar-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="name-ar-{{ ex.id }}" value="{{ ex.name_ar }}" placeholder="Exercise name in Arabic">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'name_ar', document.getElementById('name-ar-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
       </div>
       
-      <div class="form-group">
-        <label>Video URL:</label>
-        <input type="text" id="video-url-{{ ex.id }}" value="{{ ex.video_url }}">
-        <button type="button" onclick="saveVideoUrl('{{ ex.id }}')">Save</button>
-      </div>
-      
-      <div class="form-group">
-        <label>Type:</label>
-        <select id="exercise-type-{{ ex.id }}">
-          <option value="weight_reps" {% if ex.type == 'weight_reps' %}selected{% endif %}>Weight Reps</option>
-          <option value="bodyweight_reps" {% if ex.type == 'bodyweight_reps' %}selected{% endif %}>Bodyweight Reps</option>
-          <option value="weighted_bodyweight_reps" {% if ex.type == 'weighted_bodyweight_reps' %}selected{% endif %}>Weighted Bodyweight Reps</option>
-          <option value="timed_sets" {% if ex.type == 'timed_sets' %}selected{% endif %}>Timed Sets</option>
-        </select>
-        <button type="button" onclick="saveExerciseType('{{ ex.id }}')">Save</button>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Added Count:</label>
+          <div class="input-with-action">
+            <input type="number" id="added-count-{{ ex.id }}" value="{{ ex.added_count|default:0 }}" min="0" step="1">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'added_count', parseInt(document.getElementById('added-count-{{ ex.id }}').value, 10) || 0)">Save</button>
+          </div>
+        </div>
       </div>
     </div>
     
-    <!-- Details Tab -->
-    <div id="details-{{ ex.id }}" class="tab-content">
+    <div class="form-section">
+      <h4 class="section-title">Classification Details</h4>
       <div class="form-row">
         <div class="form-group">
           <label>Category (EN):</label>
-          <input type="text" id="category-en-{{ ex.id }}" value="{{ ex.category_en }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'category_en', document.getElementById('category-en-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="category-en-{{ ex.id }}" value="{{ ex.category_en }}" placeholder="Category in English">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'category_en', document.getElementById('category-en-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Category (AR):</label>
-          <input type="text" id="category-ar-{{ ex.id }}" value="{{ ex.category_ar }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'category_ar', document.getElementById('category-ar-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="category-ar-{{ ex.id }}" value="{{ ex.category_ar }}" placeholder="Category in Arabic">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'category_ar', document.getElementById('category-ar-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
           <label>Equipment (EN):</label>
-          <input type="text" id="equipment-en-{{ ex.id }}" value="{{ ex.equipment_en }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'equipment_en', document.getElementById('equipment-en-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="equipment-en-{{ ex.id }}" value="{{ ex.equipment_en }}" placeholder="Equipment in English">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'equipment_en', document.getElementById('equipment-en-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Equipment (AR):</label>
-          <input type="text" id="equipment-ar-{{ ex.id }}" value="{{ ex.equipment_ar }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'equipment_ar', document.getElementById('equipment-ar-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="equipment-ar-{{ ex.id }}" value="{{ ex.equipment_ar }}" placeholder="Equipment in Arabic">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'equipment_ar', document.getElementById('equipment-ar-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
           <label>Force (EN):</label>
-          <input type="text" id="force-en-{{ ex.id }}" value="{{ ex.force_en }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'force_en', document.getElementById('force-en-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="force-en-{{ ex.id }}" value="{{ ex.force_en }}" placeholder="Force in English">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'force_en', document.getElementById('force-en-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Force (AR):</label>
-          <input type="text" id="force-ar-{{ ex.id }}" value="{{ ex.force_ar }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'force_ar', document.getElementById('force-ar-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="force-ar-{{ ex.id }}" value="{{ ex.force_ar }}" placeholder="Force in Arabic">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'force_ar', document.getElementById('force-ar-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
           <label>Level (EN):</label>
-          <input type="text" id="level-en-{{ ex.id }}" value="{{ ex.level_en }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'level_en', document.getElementById('level-en-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="level-en-{{ ex.id }}" value="{{ ex.level_en }}" placeholder="Level in English">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'level_en', document.getElementById('level-en-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Level (AR):</label>
-          <input type="text" id="level-ar-{{ ex.id }}" value="{{ ex.level_ar }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'level_ar', document.getElementById('level-ar-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="level-ar-{{ ex.id }}" value="{{ ex.level_ar }}" placeholder="Level in Arabic">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'level_ar', document.getElementById('level-ar-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
       </div>
       
       <div class="form-row">
         <div class="form-group">
           <label>Mechanic (EN):</label>
-          <input type="text" id="mechanic-en-{{ ex.id }}" value="{{ ex.mechanic_en }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'mechanic_en', document.getElementById('mechanic-en-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="mechanic-en-{{ ex.id }}" value="{{ ex.mechanic_en }}" placeholder="Mechanic in English">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'mechanic_en', document.getElementById('mechanic-en-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
         <div class="form-group">
           <label>Mechanic (AR):</label>
-          <input type="text" id="mechanic-ar-{{ ex.id }}" value="{{ ex.mechanic_ar }}">
-          <button type="button" onclick="updateField('{{ ex.id }}', 'mechanic_ar', document.getElementById('mechanic-ar-{{ ex.id }}').value)">Save</button>
+          <div class="input-with-action">
+            <input type="text" id="mechanic-ar-{{ ex.id }}" value="{{ ex.mechanic_ar }}" placeholder="Mechanic in Arabic">
+            <button type="button" class="action-button" onclick="updateField('{{ ex.id }}', 'mechanic_ar', document.getElementById('mechanic-ar-{{ ex.id }}').value)">Save</button>
+          </div>
         </div>
       </div>
     </div>
     
-    <!-- Muscles Tab -->
-    <div id="muscles-{{ ex.id }}" class="tab-content">
-      <div class="form-row">
-        <div class="form-group">
-          <label>Primary Muscles (English):</label>
-          <div id="primary-muscles-en-list-{{ ex.id }}" class="list-container">
-            {% for muscle in ex.primaryMuscles_en %}
-            <div class="list-item">
-              <input type="text" value="{{ muscle }}" id="pm-en-{{ ex.id }}-{{ forloop.counter0 }}">
-              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'primaryMuscles_en', '{{ forloop.counter0 }}')">×</button>
+    <div class="form-section">
+      <h4 class="section-title">Muscles</h4>
+      
+      <div class="subsection">
+        <h5>Primary Muscles</h5>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Primary Muscles (English):</label>
+            <div id="primary-muscles-en-list-{{ ex.id }}" class="list-container">
+              {% for muscle in ex.primaryMuscles_en %}
+              <div class="list-item">
+                <input type="text" value="{{ muscle }}" id="pm-en-{{ ex.id }}-{{ forloop.counter0 }}">
+                <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'primaryMuscles_en', '{{ forloop.counter0 }}')">×</button>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="list-item">
-            <input type="text" id="new-pm-en-{{ ex.id }}">
-            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'primaryMuscles_en', 'new-pm-en-{{ ex.id }}')">+</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label>Primary Muscles (Arabic):</label>
-          <div id="primary-muscles-ar-list-{{ ex.id }}" class="list-container">
-            {% for muscle in ex.primaryMuscles_ar %}
-            <div class="list-item">
-              <input type="text" value="{{ muscle }}" id="pm-ar-{{ ex.id }}-{{ forloop.counter0 }}">
-              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'primaryMuscles_ar', '{{ forloop.counter0 }}')">×</button>
+            <div class="input-with-action">
+              <input type="text" id="new-pm-en-{{ ex.id }}" placeholder="Add primary muscle">
+              <button class="action-button" onclick="addListItem('{{ ex.id }}', 'primaryMuscles_en', 'new-pm-en-{{ ex.id }}')">+</button>
             </div>
-            {% endfor %}
           </div>
-          <div class="list-item">
-            <input type="text" id="new-pm-ar-{{ ex.id }}">
-            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'primaryMuscles_ar', 'new-pm-ar-{{ ex.id }}')">+</button>
+          
+          <div class="form-group">
+            <label>Primary Muscles (Arabic):</label>
+            <div id="primary-muscles-ar-list-{{ ex.id }}" class="list-container">
+              {% for muscle in ex.primaryMuscles_ar %}
+              <div class="list-item">
+                <input type="text" value="{{ muscle }}" id="pm-ar-{{ ex.id }}-{{ forloop.counter0 }}">
+                <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'primaryMuscles_ar', '{{ forloop.counter0 }}')">×</button>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="input-with-action">
+              <input type="text" id="new-pm-ar-{{ ex.id }}" placeholder="Add primary muscle">
+              <button class="action-button" onclick="addListItem('{{ ex.id }}', 'primaryMuscles_ar', 'new-pm-ar-{{ ex.id }}')">+</button>
+            </div>
           </div>
         </div>
       </div>
       
-      <div class="form-row">
-        <div class="form-group">
-          <label>Secondary Muscles (English):</label>
-          <div id="secondary-muscles-en-list-{{ ex.id }}" class="list-container">
-            {% for muscle in ex.secondaryMuscles_en %}
-            <div class="list-item">
-              <input type="text" value="{{ muscle }}" id="sm-en-{{ ex.id }}-{{ forloop.counter0 }}">
-              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'secondaryMuscles_en', '{{ forloop.counter0 }}')">×</button>
+      <div class="subsection">
+        <h5>Secondary Muscles</h5>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Secondary Muscles (English):</label>
+            <div id="secondary-muscles-en-list-{{ ex.id }}" class="list-container">
+              {% for muscle in ex.secondaryMuscles_en %}
+              <div class="list-item">
+                <input type="text" value="{{ muscle }}" id="sm-en-{{ ex.id }}-{{ forloop.counter0 }}">
+                <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'secondaryMuscles_en', '{{ forloop.counter0 }}')">×</button>
+              </div>
+              {% endfor %}
             </div>
-            {% endfor %}
-          </div>
-          <div class="list-item">
-            <input type="text" id="new-sm-en-{{ ex.id }}">
-            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'secondaryMuscles_en', 'new-sm-en-{{ ex.id }}')">+</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label>Secondary Muscles (Arabic):</label>
-          <div id="secondary-muscles-ar-list-{{ ex.id }}" class="list-container">
-            {% for muscle in ex.secondaryMuscles_ar %}
-            <div class="list-item">
-              <input type="text" value="{{ muscle }}" id="sm-ar-{{ ex.id }}-{{ forloop.counter0 }}">
-              <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'secondaryMuscles_ar', '{{ forloop.counter0 }}')">×</button>
+            <div class="input-with-action">
+              <input type="text" id="new-sm-en-{{ ex.id }}" placeholder="Add secondary muscle">
+              <button class="action-button" onclick="addListItem('{{ ex.id }}', 'secondaryMuscles_en', 'new-sm-en-{{ ex.id }}')">+</button>
             </div>
-            {% endfor %}
           </div>
-          <div class="list-item">
-            <input type="text" id="new-sm-ar-{{ ex.id }}">
-            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'secondaryMuscles_ar', 'new-sm-ar-{{ ex.id }}')">+</button>
+          
+          <div class="form-group">
+            <label>Secondary Muscles (Arabic):</label>
+            <div id="secondary-muscles-ar-list-{{ ex.id }}" class="list-container">
+              {% for muscle in ex.secondaryMuscles_ar %}
+              <div class="list-item">
+                <input type="text" value="{{ muscle }}" id="sm-ar-{{ ex.id }}-{{ forloop.counter0 }}">
+                <button class="remove-item" type="button" onclick="removeListItem('{{ ex.id }}', 'secondaryMuscles_ar', '{{ forloop.counter0 }}')">×</button>
+              </div>
+              {% endfor %}
+            </div>
+            <div class="input-with-action">
+              <input type="text" id="new-sm-ar-{{ ex.id }}" placeholder="Add secondary muscle">
+              <button class="action-button" onclick="addListItem('{{ ex.id }}', 'secondaryMuscles_ar', 'new-sm-ar-{{ ex.id }}')">+</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
     
-    <!-- Instructions Tab -->
-    <div id="instructions-{{ ex.id }}" class="tab-content">
+    <div class="form-section">
+      <h4 class="section-title">Instructions</h4>
       <div class="form-row">
         <div class="form-group">
           <label>Instructions (English):</label>
@@ -404,14 +568,12 @@
             </div>
             {% endfor %}
           </div>
-          <div class="list-item">
-            <input type="text" id="new-inst-en-{{ ex.id }}">
-            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'instructions_en', 'new-inst-en-{{ ex.id }}')">+</button>
+          <div class="input-with-action">
+            <input type="text" id="new-inst-en-{{ ex.id }}" placeholder="Add instruction step">
+            <button class="action-button" onclick="addListItem('{{ ex.id }}', 'instructions_en', 'new-inst-en-{{ ex.id }}')">+</button>
           </div>
         </div>
-      </div>
-      
-      <div class="form-row">
+        
         <div class="form-group">
           <label>Instructions (Arabic):</label>
           <div id="instructions-ar-list-{{ ex.id }}" class="list-container">
@@ -422,29 +584,44 @@
             </div>
             {% endfor %}
           </div>
-          <div class="list-item">
-            <input type="text" id="new-inst-ar-{{ ex.id }}">
-            <button class="add-button" onclick="addListItem('{{ ex.id }}', 'instructions_ar', 'new-inst-ar-{{ ex.id }}')">+</button>
+          <div class="input-with-action">
+            <input type="text" id="new-inst-ar-{{ ex.id }}" placeholder="Add instruction step">
+            <button class="action-button" onclick="addListItem('{{ ex.id }}', 'instructions_ar', 'new-inst-ar-{{ ex.id }}')">+</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
   
-  <div style="margin-top:20px;">
-    <button class="delete-button" onclick="deleteExercise('{{ ex.id }}')">Delete Exercise</button>
-  </div>
-</div>
-{% endfor %}
+    <div style="margin-top:20px;">
+      <button class="delete-button" onclick="deleteExercise('{{ ex.id }}')">Delete Exercise</button>
+    </div>
+    </div><!-- End card-content -->
+  </div><!-- End exercise card -->
+  {% endfor %}
+</div><!-- End exercises-container -->
 
 <!-- Image Crop Modal -->
 <div id="cropModal" class="modal">
-  <div class="modal-content">
-    <h3>Crop Image</h3>
-    <img id="cropImage" src="" alt="Image for cropping">
-    <div class="modal-buttons">
-      <button id="cropButton">Save Cropped Image</button>
-      <button id="cancelCropButton">Cancel</button>
+  <div class="modal-content cropper-modal">
+    <div class="modal-header">
+      <h3>Crop Exercise Image</h3>
+      <span class="close-modal">&times;</span>
+    </div>
+    <div class="image-cropper-container">
+      <img id="cropImage" src="" alt="Image for cropping">
+    </div>
+    <div class="cropper-controls">
+      <div class="aspect-ratio-controls">
+        <button class="aspect-ratio-btn" data-ratio="3/2" title="3:2 Aspect Ratio (Default)">3:2</button>
+        <button class="aspect-ratio-btn" data-ratio="1" title="Square (1:1)">1:1</button>
+        <button class="aspect-ratio-btn" data-ratio="4/3" title="4:3 Aspect Ratio">4:3</button>
+        <button class="aspect-ratio-btn" data-ratio="16/9" title="16:9 Aspect Ratio">16:9</button>
+        <button class="aspect-ratio-btn" data-ratio="free" title="Free Aspect Ratio">Free</button>
+      </div>
+      <div class="modal-buttons">
+        <button id="cancelCropButton">Cancel</button>
+        <button id="cropButton">Save Cropped Image</button>
+      </div>
     </div>
   </div>
 </div>
@@ -452,6 +629,8 @@
 <!-- Include the Cropper.js library -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+<!-- Include Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
 <style>
   /* General styling */
@@ -460,6 +639,25 @@
     line-height: 1.6;
     color: #333;
     background-color: #f8f9fa;
+    padding-bottom: 40px;
+  }
+  
+  /* Accessibility focus styles */
+  *:focus {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+  }
+  
+  .keyboard-shortcut {
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-size: 12px;
+    font-family: monospace;
+    margin: 0 2px;
+    vertical-align: middle;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
   }
   
   h1 {
@@ -490,12 +688,260 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     padding: 25px;
     margin-bottom: 30px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease;
   }
   
-  .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+  .filter-container {
+    background-color: #f1f8ff;
+    border-left: 4px solid #3498db;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .card-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  
+  .card-header h2 {
+    margin: 0;
+  }
+  
+  .exercise-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+  }
+  
+  .batch-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .exercise-count {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .completion-status {
+    margin-top: 5px;
+  }
+  
+  .completion-text {
+    font-size: 13px;
+    color: #666;
+    margin-top: 3px;
+  }
+  
+  .progress-bar {
+    height: 8px;
+    background-color: #ecf0f1;
+    border-radius: 4px;
+    overflow: hidden;
+    width: 250px;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background-color: #2ecc71;
+    transition: width 0.5s ease-in-out;
+  }
+  
+  #completion-percentage {
+    font-weight: bold;
+    color: #2ecc71;
+  }
+  
+  .quick-edit-btn {
+    background-color: #9b59b6;
+    color: white;
+  }
+  
+  .quick-edit-btn:hover {
+    background-color: #8e44ad;
+  }
+  
+  .exercise.focused {
+    box-shadow: 0 0 0 2px #3498db, 0 4px 8px rgba(0,0,0,0.2);
+  }
+  
+  .quick-edit-mode {
+    background-color: #f1f8ff;
+    border-left: 4px solid #9b59b6;
+  }
+  
+  .shortcuts-help {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    padding: 15px;
+    max-width: 350px;
+    z-index: 100;
+    border-left: 4px solid #3498db;
+  }
+  
+  .shortcuts-help h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #3498db;
+  }
+  
+  .shortcuts-help table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .shortcuts-help td {
+    padding: 5px 0;
+  }
+  
+  .shortcuts-help .key {
+    font-weight: bold;
+    font-family: monospace;
+    background: #f1f1f1;
+    padding: 2px 5px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+  }
+  
+  .toggle-card {
+    background: none;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s ease;
+  }
+  
+  .toggle-card:hover {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+  
+  .toggle-card.collapsed {
+    transform: rotate(180deg);
+  }
+  
+  .exercises-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .exercise-count {
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .status-indicators {
+    display: inline-flex;
+    margin-left: 10px;
+    font-size: 14px;
+    align-items: center;
+  }
+  
+  .status-dot {
+    margin-right: 5px;
+    cursor: help;
+  }
+  
+  .status-dot.green {
+    color: #27ae60;
+  }
+  
+  .status-dot.red {
+    color: #e74c3c;
+  }
+  
+  /* Professional form styling */
+  .create-form {
+    border-left: 4px solid #2ecc71;
+    background-color: #f9fefc;
+  }
+  
+  .form-section {
+    margin-bottom: 30px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 10px;
+  }
+  
+  .section-title {
+    color: #2c3e50;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .subsection {
+    margin: 20px 0;
+    padding-top: 15px;
+    border-top: 1px dashed #eee;
+  }
+  
+  .subsection h5 {
+    color: #34495e;
+    font-weight: 500;
+    margin-bottom: 15px;
+    font-size: 16px;
+  }
+  
+  .input-with-action {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .input-with-action input {
+    flex-grow: 1;
+    margin-right: 5px;
+  }
+  
+  .action-button {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  
+  .form-actions {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .required {
+    color: #e74c3c;
+    margin-left: 3px;
   }
   
   /* Form styling */
@@ -568,6 +1014,19 @@
   
   .add-button:hover {
     background-color: #27ae60;
+  }
+  
+  .secondary-button {
+    background-color: #95a5a6;
+  }
+  
+  .secondary-button:hover {
+    background-color: #7f8c8d;
+  }
+  
+  .small-button {
+    padding: 4px 10px;
+    font-size: 12px;
   }
   
   /* Image styling */
@@ -677,41 +1136,350 @@
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.7);
+    background-color: rgba(0,0,0,0.8);
   }
   
   .modal-content {
     background-color: white;
     margin: 5% auto;
-    padding: 25px;
+    padding: 0;
     border-radius: 8px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    width: 80%;
+    width: 90%;
     max-width: 800px;
+    overflow: hidden;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+  }
+  
+  .modal-header h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .close-modal {
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+    transition: color 0.2s;
+  }
+  
+  .close-modal:hover {
+    color: #333;
+  }
+  
+  .image-cropper-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    max-height: 60vh;
+    overflow: hidden;
   }
   
   #cropImage {
     max-width: 100%;
     max-height: 60vh;
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .cropper-controls {
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+    background-color: #f9f9f9;
+  }
+  
+  .aspect-ratio-controls {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+  }
+  
+  .aspect-ratio-btn {
+    padding: 6px 12px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+  
+  .aspect-ratio-btn:hover {
+    border-color: #3498db;
+    background-color: #e8f4fc;
+  }
+  
+  .aspect-ratio-btn.active {
+    border-color: #3498db;
+    background-color: #3498db;
+    color: white;
   }
   
   .modal-buttons {
     display: flex;
     justify-content: flex-end;
-    margin-top: 20px;
+    margin-top: 10px;
+  }
+  
+  .modal-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+    transition: background-color 0.2s;
   }
   
   #cropButton {
     background-color: #2ecc71;
-    margin-right: 10px;
+  }
+  
+  #cropButton:hover {
+    background-color: #27ae60;
   }
   
   #cancelCropButton {
     background-color: #e74c3c;
   }
+  
+  #cancelCropButton:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Enhanced Image Styling */
+  .image-editor-container {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .image-editor-container:hover .image-overlay {
+    opacity: 1;
+  }
+  
+  .image-edit-btn, .image-upload-btn {
+    background-color: #fff;
+    color: #333;
+    border: none;
+    padding: 8px 16px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+  
+  .image-edit-btn i, .image-upload-btn i {
+    margin-right: 5px;
+  }
+  
+  .image-edit-btn:hover, .image-upload-btn:hover {
+    background-color: #f1c40f;
+  }
+  
+  .empty-image-container {
+    width: 300px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .empty-image-container:hover {
+    border-color: #3498db;
+    background-color: #e8f4fc;
+  }
+  
+  .empty-image-container i {
+    font-size: 48px;
+    color: #bbb;
+    margin-bottom: 10px;
+  }
+  
+  .empty-image-container p {
+    color: #888;
+    font-weight: bold;
+  }
+  
+  .image-upload-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background-color: #3498db;
+    transition: width 0.3s ease;
+  }
+  
+  /* Hide file input */
+  .file-upload-input {
+    display: none;
+  }
+  
+  /* Drag and drop styles */
+  .drag-over {
+    border: 2px dashed #3498db !important;
+    background-color: rgba(52, 152, 219, 0.1);
+    transform: scale(1.03);
+  }
 </style>
 
 <script>
+// Filter and UI functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize exercise count
+    updateVisibleExercisesCount();
+    
+    // Calculate completion percentage
+    updateCompletionStatus();
+    
+    // Setup filter listeners
+    document.getElementById('filter-name').addEventListener('input', filterExercises);
+    document.getElementById('filter-type').addEventListener('change', filterExercises);
+    document.getElementById('filter-category').addEventListener('input', filterExercises);
+    document.getElementById('filter-muscles').addEventListener('input', filterExercises);
+    document.getElementById('clear-filters').addEventListener('click', clearFilters);
+    
+    // Auto-collapse all cards except first few
+    const exerciseCards = document.querySelectorAll('.exercise');
+    exerciseCards.forEach((card, index) => {
+        const cardId = card.id.split('exercise-')[1];
+        if (index >= 3) { // Keep first couple open
+            toggleExerciseCard(cardId);
+        }
+    });
+});
+
+// Calculate completion percentage
+function updateCompletionStatus() {
+    const exerciseCards = document.querySelectorAll('.exercise');
+    let completeCount = 0;
+    const totalExercises = exerciseCards.length;
+    
+    exerciseCards.forEach(card => {
+        const hasPrimaryImage = card.querySelector('.status-dot[title="Has primary image"].green');
+        const hasPrimaryMuscles = card.querySelector('.status-dot[title="Has primary muscles"].green');
+        const hasInstructions = card.querySelector('.status-dot[title="Has instructions"].green');
+        
+        if (hasPrimaryImage && hasPrimaryMuscles && hasInstructions) {
+            completeCount++;
+        }
+    });
+    
+    const percentComplete = totalExercises > 0 ? Math.round((completeCount / totalExercises) * 100) : 0;
+    
+    document.getElementById('completion-progress').style.width = `${percentComplete}%`;
+    document.getElementById('completion-percentage').textContent = `${percentComplete}%`;
+    document.getElementById('complete-count').textContent = completeCount;
+    document.getElementById('total-exercises').textContent = totalExercises;
+}
+
+function filterExercises() {
+    const nameFilter = document.getElementById('filter-name').value.toLowerCase();
+    const typeFilter = document.getElementById('filter-type').value.toLowerCase();
+    const categoryFilter = document.getElementById('filter-category').value.toLowerCase();
+    const musclesFilter = document.getElementById('filter-muscles').value.toLowerCase();
+    
+    const exerciseCards = document.querySelectorAll('.exercise');
+    
+    exerciseCards.forEach(card => {
+        const exerciseName = card.dataset.name.toLowerCase();
+        const exerciseType = card.dataset.type.toLowerCase();
+        const exerciseCategory = card.dataset.category.toLowerCase();
+        const exerciseMuscles = (card.dataset.primaryMuscles + ' ' + card.dataset.secondaryMuscles).toLowerCase();
+        
+        const nameMatch = nameFilter === '' || exerciseName.includes(nameFilter);
+        const typeMatch = typeFilter === '' || exerciseType === typeFilter;
+        const categoryMatch = categoryFilter === '' || exerciseCategory.includes(categoryFilter);
+        const musclesMatch = musclesFilter === '' || exerciseMuscles.includes(musclesFilter);
+        
+        if (nameMatch && typeMatch && categoryMatch && musclesMatch) {
+            card.style.display = '';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    updateVisibleExercisesCount();
+}
+
+function updateVisibleExercisesCount() {
+    const total = document.querySelectorAll('.exercise').length;
+    const visible = document.querySelectorAll('.exercise:not([style*="display: none"])').length;
+    
+    document.getElementById('visible-count').textContent = visible;
+    document.getElementById('total-count').textContent = total;
+}
+
+function clearFilters() {
+    document.getElementById('filter-name').value = '';
+    document.getElementById('filter-type').value = '';
+    document.getElementById('filter-category').value = '';
+    document.getElementById('filter-muscles').value = '';
+    
+    const exerciseCards = document.querySelectorAll('.exercise');
+    exerciseCards.forEach(card => {
+        card.style.display = '';
+    });
+    
+    updateVisibleExercisesCount();
+}
+
+function toggleExerciseCard(exerciseId) {
+    const content = document.getElementById(`content-${exerciseId}`);
+    const button = document.querySelector(`#exercise-${exerciseId} .toggle-card`);
+    
+    if (content.style.display === 'none') {
+        content.style.display = 'block';
+        button.classList.remove('collapsed');
+        button.textContent = '▼';
+    } else {
+        content.style.display = 'none';
+        button.classList.add('collapsed');
+        button.textContent = '▲';
+    }
+}
+
+// Image cropper
 let cropper;
 const cropModal = document.getElementById('cropModal');
 const cropImage = document.getElementById('cropImage');
@@ -831,12 +1599,15 @@ function updateArrayField(exerciseId, fieldName, valueArray) {
     // Validate inputs
     if (!exerciseId || !fieldName || !Array.isArray(valueArray)) {
         console.error('Invalid inputs to updateArrayField:', { exerciseId, fieldName, valueArray });
-        alert('Error: Invalid data for update');
+        showNotification('Error: Invalid data for update', 'error');
         return;
     }
 
     const data = {};
     data[fieldName] = valueArray;
+    
+    // Show saving indicator
+    showAutoSaveIndicator('saving');
     
     fetch(`/portal/exercises/${exerciseId}/update_array/`, {
         method: 'POST',
@@ -854,15 +1625,70 @@ function updateArrayField(exerciseId, fieldName, valueArray) {
     })
     .then(data => {
         if (data.success) {
-            // Reload the page to show updated values
-            window.location.reload();
+            showAutoSaveIndicator('saved');
+            
+            // Instead of reloading the page, update the list items dynamically
+            if (currentQuickEditExerciseId === exerciseId) {
+                // If we're in quick edit mode, show success indicator without reload
+                showNotification(`Updated ${fieldName} (${valueArray.length} items)`, 'success');
+                
+                // Dynamically update the list container
+                const listContainerId = `${fieldName.replace('_', '-')}-list-${exerciseId}`;
+                const listContainer = document.getElementById(listContainerId);
+                
+                if (listContainer) {
+                    // Clear existing items
+                    listContainer.innerHTML = '';
+                    
+                    // Add new items
+                    valueArray.forEach((value, index) => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'list-item';
+                        
+                        const itemInput = document.createElement('input');
+                        itemInput.type = 'text';
+                        itemInput.value = value;
+                        itemInput.id = `${fieldName.charAt(0)}${fieldName.charAt(fieldName.indexOf('_') + 1)}-${fieldName.includes('en') ? 'en' : 'ar'}-${exerciseId}-${index}`;
+                        
+                        const removeButton = document.createElement('button');
+                        removeButton.className = 'remove-item';
+                        removeButton.type = 'button';
+                        removeButton.textContent = '×';
+                        removeButton.onclick = function() {
+                            removeListItem(exerciseId, fieldName, index);
+                        };
+                        
+                        itemDiv.appendChild(itemInput);
+                        itemDiv.appendChild(removeButton);
+                        listContainer.appendChild(itemDiv);
+                    });
+                    
+                    // Clear the input field
+                    const inputPrefix = fieldName.includes('primary') ? 'pm' : 
+                                      fieldName.includes('secondary') ? 'sm' : 'inst';
+                    const langSuffix = fieldName.includes('en') ? 'en' : 'ar';
+                    const inputId = `new-${inputPrefix}-${langSuffix}-${exerciseId}`;
+                    const input = document.getElementById(inputId);
+                    if (input) {
+                        input.value = '';
+                    }
+                } else {
+                    console.error(`List container ${listContainerId} not found`);
+                    window.location.reload();
+                }
+            } else {
+                // In normal mode, reload the page
+                window.location.reload();
+            }
         } else {
-            alert(`Error updating ${fieldName}: ` + (data.error || 'Unknown error'));
+            showAutoSaveIndicator('error');
+            showNotification(`Error updating ${fieldName}: ` + (data.error || 'Unknown error'), 'error');
         }
     })
     .catch(error => {
         console.error('Error updating array field:', error);
-        alert(`Failed to update ${fieldName}: ${error.message}`);
+        showAutoSaveIndicator('error');
+        showNotification(`Failed to update ${fieldName}: ${error.message}`, 'error');
     });
 }
 
@@ -880,20 +1706,130 @@ function openCropModal(imageSrc) {
         cropper.destroy();
     }
 
+    // Reset active aspect ratio button
+    const aspectRatioBtns = document.querySelectorAll('.aspect-ratio-btn');
+    aspectRatioBtns.forEach(btn => btn.classList.remove('active'));
+    document.querySelector('.aspect-ratio-btn[data-ratio="3/2"]').classList.add('active');
+    
     cropImage.src = imageSrc;
     cropModal.style.display = 'block';
 
+    // Initialize cropper with 3:2 aspect ratio (default)
     cropper = new Cropper(cropImage, {
         aspectRatio: 3 / 2,
         viewMode: 1,
+        guides: true,
+        center: true,
+        highlight: true,
+        background: false,
+        autoCropArea: 0.8,
+        responsive: true,
         ready() {
+            // Set optimal crop area
             cropper.setData({ width: 300, height: 200 });
         }
     });
+    
+    // Add event listeners for aspect ratio controls
+    setupAspectRatioControls();
+}
+
+function setupAspectRatioControls() {
+    const aspectRatioBtns = document.querySelectorAll('.aspect-ratio-btn');
+    
+    aspectRatioBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            aspectRatioBtns.forEach(b => b.classList.remove('active'));
+            
+            // Add active class to clicked button
+            btn.classList.add('active');
+            
+            // Get aspect ratio from data attribute
+            const ratio = btn.dataset.ratio;
+            
+            // Set new aspect ratio
+            if (ratio === 'free') {
+                cropper.setAspectRatio(NaN); // Free aspect ratio
+            } else {
+                // Parse the ratio (e.g., "3/2" or "1")
+                let aspectRatio;
+                if (ratio.includes('/')) {
+                    const [numerator, denominator] = ratio.split('/');
+                    aspectRatio = parseFloat(numerator) / parseFloat(denominator);
+                } else {
+                    aspectRatio = parseFloat(ratio);
+                }
+                
+                cropper.setAspectRatio(aspectRatio);
+            }
+        });
+    });
+    
+    // Add close button functionality
+    const closeBtn = document.querySelector('.close-modal');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropModal.style.display = 'none';
+        });
+    }
 }
 
 cropButton.addEventListener('click', () => {
-    const croppedCanvas = cropper.getCroppedCanvas();
+    // Define optimal dimensions based on aspect ratio
+    let width, height;
+    const aspectRatio = cropper.getAspectRatio();
+    
+    if (isNaN(aspectRatio) || aspectRatio === 0) {
+        // Free aspect ratio, use default size but maintain crop proportion
+        const data = cropper.getData();
+        const cropRatio = data.width / data.height;
+        
+        // Set a reasonable size while maintaining the ratio
+        if (cropRatio > 1) {
+            width = 600;
+            height = width / cropRatio;
+        } else {
+            height = 400;
+            width = height * cropRatio;
+        }
+    } else if (Math.abs(aspectRatio - (3/2)) < 0.01) {
+        // 3:2 ratio
+        width = 600;
+        height = 400;
+    } else if (Math.abs(aspectRatio - 1) < 0.01) {
+        // 1:1 ratio (square)
+        width = 500;
+        height = 500;
+    } else if (Math.abs(aspectRatio - (4/3)) < 0.01) {
+        // 4:3 ratio
+        width = 600;
+        height = 450;
+    } else if (Math.abs(aspectRatio - (16/9)) < 0.01) {
+        // 16:9 ratio
+        width = 640;
+        height = 360;
+    } else {
+        // Default fallback
+        width = 600;
+        height = width / aspectRatio;
+    }
+    
+    // Create the cropped canvas with the optimal dimensions
+    const croppedCanvas = cropper.getCroppedCanvas({
+        width: width,
+        height: height,
+        imageSmoothingEnabled: true,
+        imageSmoothingQuality: 'high'
+    });
+    
+    // Show loading state
+    cropButton.disabled = true;
+    cropButton.textContent = 'Saving...';
+    
     croppedCanvas.toBlob((blob) => {
         const formData = new FormData();
         formData.append('image', blob, 'cropped.jpg');
@@ -907,13 +1843,38 @@ cropButton.addEventListener('click', () => {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                currentImageElement.src = data.newImageUrl;
+                // Update the image with a timestamp to prevent caching
+                currentImageElement.src = data.newImageUrl + '?t=' + new Date().getTime();
                 cropModal.style.display = 'none';
+                
+                // Show success notification
+                showNotification('Image updated successfully', 'success');
+                
+                // Update the status dot for the exercise if it's the primary image
+                if (currentImageType === '1') {
+                    const statusDot = document.querySelector(`#exercise-${currentExerciseId} .card-header .status-dot[title*="image"]`);
+                    if (statusDot) {
+                        statusDot.className = 'status-dot green';
+                        statusDot.title = 'Has primary image';
+                    }
+                }
             } else {
-                alert('Error uploading cropped image: ' + (data.error || 'Unknown error'));
+                showNotification('Error uploading cropped image: ' + (data.error || 'Unknown error'), 'error');
             }
+            
+            // Reset button state
+            cropButton.disabled = false;
+            cropButton.textContent = 'Save Cropped Image';
+        })
+        .catch(error => {
+            console.error('Error uploading cropped image:', error);
+            showNotification('Failed to upload image. Please try again.', 'error');
+            
+            // Reset button state
+            cropButton.disabled = false;
+            cropButton.textContent = 'Save Cropped Image';
         });
-    });
+    }, 'image/jpeg', 0.9); // Use 90% JPEG quality for better compression
 });
 
 cancelCropButton.addEventListener('click', () => {
@@ -921,6 +1882,194 @@ cancelCropButton.addEventListener('click', () => {
         cropper.destroy();
     }
     cropModal.style.display = 'none';
+});
+
+// File upload functions for images
+function triggerFileUpload(exerciseId, imageType) {
+    // Create a file input element if it doesn't exist
+    let fileInput = document.getElementById(`file-upload-${exerciseId}-${imageType}`);
+    
+    if (!fileInput) {
+        fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.id = `file-upload-${exerciseId}-${imageType}`;
+        fileInput.className = 'file-upload-input';
+        document.body.appendChild(fileInput);
+        
+        // Add event listener for file selection
+        fileInput.addEventListener('change', (event) => {
+            if (event.target.files && event.target.files[0]) {
+                const file = event.target.files[0];
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification('File is too large. Maximum size is 5MB.', 'error');
+                    return;
+                }
+                
+                // Check file type
+                if (!file.type.match('image.*')) {
+                    showNotification('Only image files are allowed.', 'error');
+                    return;
+                }
+                
+                // Upload the file
+                uploadImage(file, exerciseId, imageType);
+            }
+        });
+    }
+    
+    // Trigger the file selection dialog
+    fileInput.click();
+}
+
+function uploadImage(file, exerciseId, imageType) {
+    // Create FormData
+    const formData = new FormData();
+    formData.append('image', file);
+    formData.append('exercise_name', exerciseId);
+    formData.append('image_type', imageType);
+    
+    // Show loading indicator
+    const targetContainer = document.querySelector(`#content-${exerciseId} .media-item:nth-child(${imageType})`);
+    
+    // Add progress bar if not exists
+    let progressBar = targetContainer.querySelector('.image-upload-progress');
+    if (!progressBar) {
+        progressBar = document.createElement('div');
+        progressBar.className = 'image-upload-progress';
+        targetContainer.querySelector('.image-editor-container').appendChild(progressBar);
+    }
+    
+    // Show the progress bar
+    progressBar.style.width = '10%';
+    
+    // Show notification
+    showNotification('Uploading image...', 'info');
+    
+    // Upload image
+    fetch('{% url "upload_exercise_image" %}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        progressBar.style.width = '75%';
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            // Update the image in the UI
+            progressBar.style.width = '100%';
+            
+            // If the image already exists, update it
+            const imageElement = targetContainer.querySelector('img.exercise-image');
+            if (imageElement) {
+                imageElement.src = data.newImageUrl + '?t=' + new Date().getTime(); // Add timestamp to prevent caching
+            } else {
+                // If there was an empty container, replace it with the new image
+                const emptyContainer = targetContainer.querySelector('.empty-image-container');
+                if (emptyContainer) {
+                    const imageEditorContainer = emptyContainer.parentNode;
+                    imageEditorContainer.innerHTML = `
+                        <img src="${data.newImageUrl}?t=${new Date().getTime()}" class="exercise-image" alt="${imageType === '1' ? 'Primary' : 'Secondary'} Image" onclick="setupImageCropper(this, '${exerciseId}', '${imageType}')">
+                        <div class="image-overlay">
+                            <button class="image-edit-btn" title="Edit Image" onclick="setupImageCropper(this.parentNode.previousElementSibling, '${exerciseId}', '${imageType}')">
+                                <i class="fas fa-crop-alt"></i> Edit
+                            </button>
+                            <button class="image-upload-btn" title="Upload New Image" onclick="triggerFileUpload('${exerciseId}', '${imageType}')">
+                                <i class="fas fa-upload"></i> Replace
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Update the status dot for the exercise
+            const statusDot = document.querySelector(`#exercise-${exerciseId} .card-header .status-dot[title*="image"]`);
+            if (statusDot) {
+                statusDot.className = 'status-dot green';
+                if (imageType === '1') {
+                    statusDot.title = 'Has primary image';
+                }
+            }
+            
+            // Show success notification
+            showNotification('Image uploaded successfully!', 'success');
+            
+            // Remove progress bar after a delay
+            setTimeout(() => {
+                if (progressBar && progressBar.parentNode) {
+                    progressBar.parentNode.removeChild(progressBar);
+                }
+            }, 2000);
+        } else {
+            // Show error message
+            progressBar.style.width = '0%';
+            showNotification('Error uploading image: ' + (data.error || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        progressBar.style.width = '0%';
+        console.error('Error uploading image:', error);
+        showNotification('Error uploading image. Please try again.', 'error');
+    });
+}
+
+// Enable drag and drop functionality for images
+function initDragAndDrop() {
+    const dropTargets = document.querySelectorAll('.image-editor-container');
+    
+    dropTargets.forEach(target => {
+        target.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            target.classList.add('drag-over');
+        });
+        
+        target.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            target.classList.remove('drag-over');
+        });
+        
+        target.addEventListener('drop', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            target.classList.remove('drag-over');
+            
+            // Get the exercise ID and image type from the target
+            const exerciseId = target.closest('.card-content').id.replace('content-', '');
+            const imageType = target.closest('.media-item').querySelector('.exercise-image') ? 
+                target.closest('.media-item').querySelector('.exercise-image').alt.includes('Primary') ? '1' : '2' : 
+                target.closest('.media-item').querySelector('.empty-image-container').parentNode.closest('.media-item:nth-child(1)') ? '1' : '2';
+            
+            // Process the dropped files
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                const file = e.dataTransfer.files[0];
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification('File is too large. Maximum size is 5MB.', 'error');
+                    return;
+                }
+                
+                // Check file type
+                if (!file.type.match('image.*')) {
+                    showNotification('Only image files are allowed.', 'error');
+                    return;
+                }
+                
+                // Upload the file
+                uploadImage(file, exerciseId, imageType);
+            }
+        });
+    });
+}
+
+// Initialize drag and drop when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initDragAndDrop();
 });
 
 function deleteExercise(exerciseId) {
@@ -999,6 +2148,9 @@ function updateField(exerciseId, fieldName, value) {
         data[fieldName] = value;
     }
     
+    // Show saving indicator
+    showAutoSaveIndicator('saving');
+    
     fetch(`/portal/exercises/${exerciseId}/update_field/`, {
         method: 'POST',
         headers: {
@@ -1010,14 +2162,28 @@ function updateField(exerciseId, fieldName, value) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(`${fieldName} updated successfully`);
+            showAutoSaveIndicator('saved');
+            // For quick edit mode, don't show alert, just a subtle notification
+            if (currentQuickEditExerciseId === exerciseId) {
+                // Optional subtle notification
+                // showNotification(`${fieldName} updated`, 'success');
+            } else {
+                showNotification(`${fieldName} updated successfully`, 'success');
+            }
+            
+            // If the field is one that affects completeness, update the status
+            if (fieldName === 'primaryMuscles_en' || fieldName === 'instructions_en' || fieldName === 'image_1') {
+                updateCompletionStatus();
+            }
         } else {
-            alert(`Error updating ${fieldName}: ` + (data.error || 'Unknown error'));
+            showAutoSaveIndicator('error');
+            showNotification(`Error updating ${fieldName}: ` + (data.error || 'Unknown error'), 'error');
         }
     })
     .catch(error => {
         console.error('Error updating field:', error);
-        alert(`Failed to update ${fieldName}: ${error.message}`);
+        showAutoSaveIndicator('error');
+        showNotification(`Failed to update ${fieldName}: ${error.message}`, 'error');
     });
 }
 
@@ -1100,12 +2266,933 @@ function createExercise() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Exercise created successfully');
+            showNotification('Exercise created successfully', 'success');
             // Reload the page to show the new exercise
             window.location.reload();
         } else {
-            alert('Error creating exercise: ' + (data.error || 'Unknown error'));
+            showNotification('Error creating exercise: ' + (data.error || 'Unknown error'), 'error');
         }
     });
+}
+
+// Advanced data entry features
+let currentQuickEditExerciseId = null;
+let currentFocusedExercise = null;
+
+// Toggle all cards
+function toggleAllCards(expand) {
+    const exerciseCards = document.querySelectorAll('.exercise');
+    exerciseCards.forEach(card => {
+        const exerciseId = card.id.split('exercise-')[1];
+        const content = document.getElementById(`content-${exerciseId}`);
+        const button = card.querySelector('.toggle-card');
+        
+        if (expand) {
+            content.style.display = 'block';
+            button.classList.remove('collapsed');
+            button.textContent = '▼';
+        } else {
+            content.style.display = 'none';
+            button.classList.add('collapsed');
+            button.textContent = '▲';
+        }
+    });
+}
+
+// Quick edit mode
+function quickEditMode(exerciseId) {
+    if (currentQuickEditExerciseId) {
+        // Exit previous quick edit mode
+        document.getElementById(`exercise-${currentQuickEditExerciseId}`).classList.remove('quick-edit-mode');
+    }
+    
+    const exerciseCard = document.getElementById(`exercise-${exerciseId}`);
+    exerciseCard.classList.toggle('quick-edit-mode');
+    
+    if (exerciseCard.classList.contains('quick-edit-mode')) {
+        currentQuickEditExerciseId = exerciseId;
+        
+        // Make sure card is expanded
+        const content = document.getElementById(`content-${exerciseId}`);
+        const button = exerciseCard.querySelector('.toggle-card');
+        content.style.display = 'block';
+        button.classList.remove('collapsed');
+        button.textContent = '▼';
+        
+        // Focus the first input
+        const firstInput = content.querySelector('input');
+        if (firstInput) {
+            firstInput.focus();
+            showNotification(`Quick edit mode activated for exercise ${exerciseId}. Use Tab to navigate fields and Enter to save.`, 'info');
+        }
+    } else {
+        currentQuickEditExerciseId = null;
+    }
+}
+
+// Keyboard navigation
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize exercise count, filters and other existing functionality
+    updateVisibleExercisesCount();
+    
+    document.getElementById('filter-name').addEventListener('input', filterExercises);
+    document.getElementById('filter-type').addEventListener('change', filterExercises);
+    document.getElementById('filter-category').addEventListener('input', filterExercises);
+    document.getElementById('filter-muscles').addEventListener('input', filterExercises);
+    document.getElementById('clear-filters').addEventListener('click', clearFilters);
+    
+    // Auto-collapse cards
+    const exerciseCards = document.querySelectorAll('.exercise');
+    exerciseCards.forEach((card, index) => {
+        const cardId = card.id.split('exercise-')[1];
+        if (index >= 3) {
+            toggleExerciseCard(cardId);
+        }
+        
+        // Add keyboard navigation for each card
+        card.addEventListener('keydown', function(e) {
+            const exerciseId = card.id.split('exercise-')[1];
+            
+            switch(e.key) {
+                case ' ': // Space key toggles card
+                    e.preventDefault();
+                    toggleExerciseCard(exerciseId);
+                    break;
+                case 'q':
+                case 'Q':
+                    e.preventDefault();
+                    quickEditMode(exerciseId);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    focusNextExercise(card);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    focusPreviousExercise(card);
+                    break;
+                case 'n':
+                case 'N':
+                    if (e.ctrlKey) {
+                        e.preventDefault();
+                        document.getElementById('new-exercise-id').focus();
+                        showNotification('Moved to Create New Exercise form', 'info');
+                    }
+                    break;
+            }
+        });
+        
+        // Focus management
+        card.addEventListener('focus', function() {
+            currentFocusedExercise = card;
+            card.classList.add('focused');
+        });
+        
+        card.addEventListener('blur', function() {
+            card.classList.remove('focused');
+        });
+    });
+    
+    // Global keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        // Shift+/ for help
+        if (e.key === '?' && e.shiftKey) {
+            e.preventDefault();
+            toggleShortcutsHelp();
+        }
+        
+        // Shift+F for focus on filter
+        if ((e.key === 'f' || e.key === 'F') && e.shiftKey) {
+            e.preventDefault();
+            document.getElementById('filter-name').focus();
+            showNotification('Filter focused. Type to search by name.', 'info');
+        }
+        
+        // Shift+N for new exercise
+        if ((e.key === 'n' || e.key === 'N') && e.shiftKey) {
+            e.preventDefault();
+            document.getElementById('new-exercise-id').focus();
+            showNotification('Create New Exercise form focused', 'info');
+        }
+        
+        // Shift+E to expand all
+        if ((e.key === 'e' || e.key === 'E') && e.shiftKey) {
+            e.preventDefault();
+            toggleAllCards(true);
+            showNotification('All exercise cards expanded', 'info');
+        }
+        
+        // Shift+C to collapse all
+        if ((e.key === 'c' || e.key === 'C') && e.shiftKey) {
+            e.preventDefault();
+            toggleAllCards(false);
+            showNotification('All exercise cards collapsed', 'info');
+        }
+    });
+    
+    // Create shortcuts help panel
+    createShortcutsHelp();
+    
+    // Enable auto-save for quick edit mode inputs
+    setupAutoSave();
+});
+
+function focusNextExercise(currentCard) {
+    const allCards = Array.from(document.querySelectorAll('.exercise'));
+    const visibleCards = allCards.filter(card => card.style.display !== 'none');
+    const currentIndex = visibleCards.indexOf(currentCard);
+    
+    if (currentIndex < visibleCards.length - 1) {
+        visibleCards[currentIndex + 1].focus();
+        visibleCards[currentIndex + 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+function focusPreviousExercise(currentCard) {
+    const allCards = Array.from(document.querySelectorAll('.exercise'));
+    const visibleCards = allCards.filter(card => card.style.display !== 'none');
+    const currentIndex = visibleCards.indexOf(currentCard);
+    
+    if (currentIndex > 0) {
+        visibleCards[currentIndex - 1].focus();
+        visibleCards[currentIndex - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+}
+
+// Check exercise completeness
+function checkExerciseCompleteness() {
+    const exerciseCards = document.querySelectorAll('.exercise');
+    let incompleteExercises = [];
+    
+    exerciseCards.forEach(card => {
+        const exerciseId = card.id.split('exercise-')[1];
+        const exerciseName = card.querySelector('h2').textContent.trim().split(' (')[0];
+        
+        // Check for missing primary image
+        const hasPrimaryImage = card.querySelector('.status-dot[title="Has primary image"].green');
+        const hasPrimaryMuscles = card.querySelector('.status-dot[title="Has primary muscles"].green');
+        const hasInstructions = card.querySelector('.status-dot[title="Has instructions"].green');
+        
+        if (!hasPrimaryImage || !hasPrimaryMuscles || !hasInstructions) {
+            incompleteExercises.push({
+                id: exerciseId,
+                name: exerciseName,
+                missing: {
+                    image: !hasPrimaryImage,
+                    muscles: !hasPrimaryMuscles,
+                    instructions: !hasInstructions
+                }
+            });
+        }
+    });
+    
+    if (incompleteExercises.length > 0) {
+        let message = `Found ${incompleteExercises.length} incomplete exercises:\n\n`;
+        
+        incompleteExercises.forEach((ex, index) => {
+            const missingItems = [];
+            if (ex.missing.image) missingItems.push('primary image');
+            if (ex.missing.muscles) missingItems.push('primary muscles');
+            if (ex.missing.instructions) missingItems.push('instructions');
+            
+            message += `${index + 1}. ${ex.name} (${ex.id}): Missing ${missingItems.join(', ')}\n`;
+        });
+        
+        // Create a report modal instead of alert
+        showCompletionReport(incompleteExercises);
+    } else {
+        showNotification('All exercises are complete!', 'success');
+    }
+}
+
+function showCompletionReport(incompleteExercises) {
+    // Create modal element if it doesn't exist
+    let reportModal = document.getElementById('completeness-report-modal');
+    if (!reportModal) {
+        reportModal = document.createElement('div');
+        reportModal.id = 'completeness-report-modal';
+        reportModal.className = 'modal';
+        
+        document.body.appendChild(reportModal);
+    }
+    
+    // Generate report content
+    let reportContent = `
+        <div class="modal-content" style="width: 80%; max-width: 800px;">
+            <h3>Exercise Completeness Report</h3>
+            <p>Found ${incompleteExercises.length} incomplete exercises.</p>
+            
+            <table class="report-table" style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <thead>
+                    <tr>
+                        <th style="text-align: left; padding: 8px; border-bottom: 2px solid #ddd;">Exercise</th>
+                        <th style="text-align: center; padding: 8px; border-bottom: 2px solid #ddd;">Primary Image</th>
+                        <th style="text-align: center; padding: 8px; border-bottom: 2px solid #ddd;">Primary Muscles</th>
+                        <th style="text-align: center; padding: 8px; border-bottom: 2px solid #ddd;">Instructions</th>
+                        <th style="text-align: center; padding: 8px; border-bottom: 2px solid #ddd;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+    `;
+    
+    incompleteExercises.forEach(ex => {
+        reportContent += `
+            <tr>
+                <td style="padding: 8px; border-bottom: 1px solid #eee;">${ex.name} (${ex.id})</td>
+                <td style="text-align: center; padding: 8px; border-bottom: 1px solid #eee;">${ex.missing.image ? '❌' : '✅'}</td>
+                <td style="text-align: center; padding: 8px; border-bottom: 1px solid #eee;">${ex.missing.muscles ? '❌' : '✅'}</td>
+                <td style="text-align: center; padding: 8px; border-bottom: 1px solid #eee;">${ex.missing.instructions ? '❌' : '✅'}</td>
+                <td style="text-align: center; padding: 8px; border-bottom: 1px solid #eee;">
+                    <button onclick="jumpToExercise('${ex.id}')">Edit</button>
+                </td>
+            </tr>
+        `;
+    });
+    
+    reportContent += `
+                </tbody>
+            </table>
+            
+            <div class="modal-buttons" style="margin-top: 20px; text-align: right;">
+                <button onclick="document.getElementById('completeness-report-modal').style.display='none'">Close</button>
+                <button onclick="downloadCompletionReport()">Download CSV</button>
+            </div>
+        </div>
+    `;
+    
+    reportModal.innerHTML = reportContent;
+    reportModal.style.display = 'block';
+}
+
+function jumpToExercise(exerciseId) {
+    const exerciseCard = document.getElementById(`exercise-${exerciseId}`);
+    if (exerciseCard) {
+        // Ensure the exercise is visible (might be hidden by filters)
+        exerciseCard.style.display = '';
+        
+        // Expand the card if collapsed
+        const content = document.getElementById(`content-${exerciseId}`);
+        if (content.style.display === 'none') {
+            toggleExerciseCard(exerciseId);
+        }
+        
+        // Scroll to the exercise
+        exerciseCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Focus and highlight the card
+        exerciseCard.focus();
+        exerciseCard.classList.add('quick-edit-mode');
+        currentQuickEditExerciseId = exerciseId;
+        
+        // Hide the report modal
+        document.getElementById('completeness-report-modal').style.display = 'none';
+    }
+}
+
+function downloadCompletionReport() {
+    const tableRows = document.querySelectorAll('#completeness-report-modal tbody tr');
+    let csvContent = "Exercise Name,Exercise ID,Missing Primary Image,Missing Primary Muscles,Missing Instructions\n";
+    
+    tableRows.forEach(row => {
+        const cols = row.querySelectorAll('td');
+        
+        // Parse exercise name and ID from the first column
+        const nameAndId = cols[0].textContent.trim();
+        const name = nameAndId.slice(0, nameAndId.lastIndexOf('(')).trim();
+        const id = nameAndId.slice(nameAndId.lastIndexOf('(') + 1, nameAndId.lastIndexOf(')')).trim();
+        
+        const missingImage = cols[1].textContent.includes('❌') ? 'Yes' : 'No';
+        const missingMuscles = cols[2].textContent.includes('❌') ? 'Yes' : 'No';
+        const missingInstructions = cols[3].textContent.includes('❌') ? 'Yes' : 'No';
+        
+        csvContent += `"${name}",${id},${missingImage},${missingMuscles},${missingInstructions}\n`;
+    });
+    
+    // Create download link
+    const encodedUri = encodeURI('data:text/csv;charset=utf-8,' + csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'incomplete_exercises_report.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+// Keyboard shortcuts help
+function createShortcutsHelp() {
+    const helpDiv = document.createElement('div');
+    helpDiv.className = 'shortcuts-help';
+    helpDiv.id = 'shortcuts-help';
+    helpDiv.style.display = 'none';
+    
+    helpDiv.innerHTML = `
+        <h4>Keyboard Shortcuts</h4>
+        <table>
+            <tr>
+                <td><span class="key">Shift</span> + <span class="key">?</span></td>
+                <td>Show/hide this help</td>
+            </tr>
+            <tr>
+                <td><span class="key">Shift</span> + <span class="key">F</span></td>
+                <td>Focus name filter</td>
+            </tr>
+            <tr>
+                <td><span class="key">Shift</span> + <span class="key">N</span></td>
+                <td>Focus new exercise form</td>
+            </tr>
+            <tr>
+                <td><span class="key">Shift</span> + <span class="key">E</span></td>
+                <td>Expand all exercise cards</td>
+            </tr>
+            <tr>
+                <td><span class="key">Shift</span> + <span class="key">C</span></td>
+                <td>Collapse all exercise cards</td>
+            </tr>
+            <tr>
+                <td><span class="key">Space</span></td>
+                <td>Toggle current exercise card</td>
+            </tr>
+            <tr>
+                <td><span class="key">Q</span></td>
+                <td>Quick edit current exercise</td>
+            </tr>
+            <tr>
+                <td><span class="key">↑</span> / <span class="key">↓</span></td>
+                <td>Navigate between exercises</td>
+            </tr>
+            <tr>
+                <td><span class="key">Tab</span></td>
+                <td>Navigate between fields</td>
+            </tr>
+            <tr>
+                <td><span class="key">Enter</span></td>
+                <td>Submit current field changes</td>
+            </tr>
+        </table>
+        <button onclick="toggleShortcutsHelp()" style="margin-top: 10px;">Close</button>
+    `;
+    
+    document.body.appendChild(helpDiv);
+}
+
+function toggleShortcutsHelp() {
+    const helpDiv = document.getElementById('shortcuts-help');
+    if (helpDiv.style.display === 'none') {
+        helpDiv.style.display = 'block';
+    } else {
+        helpDiv.style.display = 'none';
+    }
+}
+
+// Auto-save functionality
+function setupAutoSave() {
+    // Add event listeners to auto-save fields when Enter is pressed
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.tagName === 'INPUT' && currentQuickEditExerciseId) {
+            e.preventDefault();
+            
+            // Check if input is part of a list item
+            const listItem = e.target.closest('.list-item');
+            if (listItem) {
+                // Get all inputs in the same list container
+                const listContainer = listItem.parentElement;
+                const allInputs = Array.from(listContainer.querySelectorAll('input'));
+                const values = allInputs.map(input => input.value.trim()).filter(val => val !== '');
+                
+                // Determine the field name from the list container ID
+                const containerId = listContainer.id;
+                let fieldName = null;
+                
+                if (containerId.includes('primary-muscles-en')) {
+                    fieldName = 'primaryMuscles_en';
+                } else if (containerId.includes('primary-muscles-ar')) {
+                    fieldName = 'primaryMuscles_ar';
+                } else if (containerId.includes('secondary-muscles-en')) {
+                    fieldName = 'secondaryMuscles_en';
+                } else if (containerId.includes('secondary-muscles-ar')) {
+                    fieldName = 'secondaryMuscles_ar';
+                } else if (containerId.includes('instructions-en')) {
+                    fieldName = 'instructions_en';
+                } else if (containerId.includes('instructions-ar')) {
+                    fieldName = 'instructions_ar';
+                }
+                
+                if (fieldName) {
+                    updateArrayField(currentQuickEditExerciseId, fieldName, values);
+                }
+            } else {
+                // Handle regular inputs
+                const inputId = e.target.id;
+                
+                // Common pattern for field inputs: field-language-exerciseId
+                const parts = inputId.split('-');
+                if (parts.length >= 3) {
+                    const fieldType = parts[0];
+                    let fieldName, value;
+                    
+                    switch (fieldType) {
+                        case 'name':
+                            fieldName = `name_${parts[1]}`;
+                            value = e.target.value;
+                            break;
+                        case 'category':
+                            fieldName = `category_${parts[1]}`;
+                            value = e.target.value;
+                            break;
+                        case 'equipment':
+                            fieldName = `equipment_${parts[1]}`;
+                            value = e.target.value;
+                            break;
+                        case 'force':
+                            fieldName = `force_${parts[1]}`;
+                            value = e.target.value;
+                            break;
+                        case 'level':
+                            fieldName = `level_${parts[1]}`;
+                            value = e.target.value;
+                            break;
+                        case 'mechanic':
+                            fieldName = `mechanic_${parts[1]}`;
+                            value = e.target.value;
+                            break;
+                        case 'video':
+                            fieldName = 'video_url';
+                            value = e.target.value;
+                            saveVideoUrl(currentQuickEditExerciseId);
+                            return;
+                        case 'added':
+                            if (parts[1] === 'count') {
+                                fieldName = 'added_count';
+                                value = parseInt(e.target.value, 10) || 0;
+                            }
+                            break;
+                    }
+                    
+                    if (fieldName) {
+                        updateField(currentQuickEditExerciseId, fieldName, value);
+                        
+                        // Focus next input
+                        const allInputs = Array.from(document.querySelectorAll('input, select, textarea'));
+                        const currentIndex = allInputs.indexOf(e.target);
+                        if (currentIndex < allInputs.length - 1) {
+                            allInputs[currentIndex + 1].focus();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Notification system
+function showNotification(message, type = 'info') {
+    // Create notification container if it doesn't exist
+    let notifContainer = document.getElementById('notification-container');
+    if (!notifContainer) {
+        notifContainer = document.createElement('div');
+        notifContainer.id = 'notification-container';
+        notifContainer.style.position = 'fixed';
+        notifContainer.style.top = '20px';
+        notifContainer.style.right = '20px';
+        notifContainer.style.zIndex = '1000';
+        document.body.appendChild(notifContainer);
+    }
+    
+    // Create notification
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <span>${message}</span>
+            <button class="notification-close">&times;</button>
+        </div>
+    `;
+    
+    // Style notification
+    notification.style.backgroundColor = type === 'error' ? '#f8d7da' : 
+                                         type === 'success' ? '#d4edda' : 
+                                         type === 'warning' ? '#fff3cd' : '#d1ecf1';
+    notification.style.color = type === 'error' ? '#721c24' : 
+                               type === 'success' ? '#155724' : 
+                               type === 'warning' ? '#856404' : '#0c5460';
+    notification.style.border = `1px solid ${type === 'error' ? '#f5c6cb' : 
+                                            type === 'success' ? '#c3e6cb' : 
+                                            type === 'warning' ? '#ffeeba' : '#bee5eb'}`;
+    notification.style.borderRadius = '4px';
+    notification.style.padding = '12px 15px';
+    notification.style.marginBottom = '10px';
+    notification.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+    notification.style.width = '300px';
+    notification.style.animation = 'slideIn 0.3s ease-out forwards';
+    
+    // Add to container
+    notifContainer.appendChild(notification);
+    
+    // Add close button functionality
+    const closeButton = notification.querySelector('.notification-close');
+    closeButton.style.border = 'none';
+    closeButton.style.background = 'transparent';
+    closeButton.style.fontSize = '18px';
+    closeButton.style.fontWeight = 'bold';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.float = 'right';
+    closeButton.style.marginLeft = '10px';
+    closeButton.style.padding = '0 5px';
+    
+    closeButton.addEventListener('click', () => {
+        notification.style.animation = 'slideOut 0.3s ease-in forwards';
+        setTimeout(() => {
+            notifContainer.removeChild(notification);
+        }, 290);
+    });
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentNode === notifContainer) {
+            notification.style.animation = 'slideOut 0.3s ease-in forwards';
+            setTimeout(() => {
+                if (notification.parentNode === notifContainer) {
+                    notifContainer.removeChild(notification);
+                }
+            }, 290);
+        }
+    }, 5000);
+}
+
+// Batch operations functionality
+function applyBatchOperation() {
+    const field = document.getElementById('batch-field').value;
+    const value = document.getElementById('batch-value').value.trim();
+    
+    if (!field || !value) {
+        showNotification('Please select a field and enter a value to apply', 'warning');
+        return;
+    }
+    
+    // Get all visible exercise cards
+    const visibleExercises = Array.from(document.querySelectorAll('.exercise')).filter(
+        card => card.style.display !== 'none'
+    );
+    
+    if (visibleExercises.length === 0) {
+        showNotification('No exercises are visible to apply changes to', 'warning');
+        return;
+    }
+    
+    // Confirm batch operation
+    if (!confirm(`Apply "${value}" to the "${field}" field of ${visibleExercises.length} visible exercises?`)) {
+        return;
+    }
+    
+    // Prepare the batch data
+    const batchData = {
+        field: field,
+        value: value,
+        exercise_ids: visibleExercises.map(card => card.id.split('exercise-')[1])
+    };
+    
+    // Send batch update request
+    fetch(`/portal/exercises/batch_update/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(batchData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            showNotification(`Successfully updated ${data.updated_count} exercises`, 'success');
+            
+            // Update the UI to reflect changes
+            visibleExercises.forEach(card => {
+                const exerciseId = card.id.split('exercise-')[1];
+                
+                // Find and update the appropriate input field if it exists
+                let inputId;
+                switch(field) {
+                    case 'category_en':
+                        inputId = `category-en-${exerciseId}`;
+                        break;
+                    case 'category_ar':
+                        inputId = `category-ar-${exerciseId}`;
+                        break;
+                    case 'equipment_en':
+                        inputId = `equipment-en-${exerciseId}`;
+                        break;
+                    case 'equipment_ar':
+                        inputId = `equipment-ar-${exerciseId}`;
+                        break;
+                    case 'force_en':
+                        inputId = `force-en-${exerciseId}`;
+                        break;
+                    case 'force_ar':
+                        inputId = `force-ar-${exerciseId}`;
+                        break;
+                    case 'level_en':
+                        inputId = `level-en-${exerciseId}`;
+                        break;
+                    case 'level_ar':
+                        inputId = `level-ar-${exerciseId}`;
+                        break;
+                    case 'mechanic_en':
+                        inputId = `mechanic-en-${exerciseId}`;
+                        break;
+                    case 'mechanic_ar':
+                        inputId = `mechanic-ar-${exerciseId}`;
+                        break;
+                }
+                
+                const inputField = document.getElementById(inputId);
+                if (inputField) {
+                    inputField.value = value;
+                }
+            });
+        } else {
+            showNotification(`Error updating exercises: ${data.error || 'Unknown error'}`, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error with batch update:', error);
+        showNotification(`Failed to update exercises: ${error.message}`, 'error');
+    });
+}
+
+// Add animation styles
+const styleElement = document.createElement('style');
+styleElement.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    
+    .notification {
+        position: relative;
+    }
+    
+    .notification-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    /* Auto-save indicator */
+    .autosave-indicator {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 10px 15px;
+        border-radius: 4px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        transition: opacity 0.3s ease;
+    }
+    
+    .autosave-indicator.saving {
+        color: #3498db;
+    }
+    
+    .autosave-indicator.saved {
+        color: #2ecc71;
+    }
+    
+    .autosave-indicator.error {
+        color: #e74c3c;
+    }
+    
+    .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top-color: #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 10px;
+    }
+    
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+    
+    /* Progress tracking for data entry */
+    .progress-bar {
+        height: 10px;
+        background-color: #ecf0f1;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        overflow: hidden;
+    }
+    
+    .progress-fill {
+        height: 100%;
+        background-color: #3498db;
+        transition: width 0.5s ease-in-out;
+    }
+    
+    /* Quick actions buttons */
+    .quick-actions {
+        position: fixed;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        z-index: 100;
+    }
+    
+    .quick-action-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .quick-action-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+`;
+document.head.appendChild(styleElement);
+
+// Create auto-save indicator
+document.addEventListener('DOMContentLoaded', function() {
+    const autoSaveIndicator = document.createElement('div');
+    autoSaveIndicator.className = 'autosave-indicator';
+    autoSaveIndicator.id = 'autosave-indicator';
+    autoSaveIndicator.style.opacity = '0';
+    autoSaveIndicator.innerHTML = `
+        <div class="spinner"></div>
+        <span>Changes automatically saved</span>
+    `;
+    document.body.appendChild(autoSaveIndicator);
+    
+    // Create quick action buttons
+    const quickActions = document.createElement('div');
+    quickActions.className = 'quick-actions';
+    quickActions.innerHTML = `
+        <div class="quick-action-btn" title="Show keyboard shortcuts" onclick="toggleShortcutsHelp()">
+            <span style="font-size: 18px">⌨️</span>
+        </div>
+        <div class="quick-action-btn" title="Jump to next incomplete exercise" onclick="jumpToNextIncomplete()">
+            <span style="font-size: 18px">⏭️</span>
+        </div>
+        <div class="quick-action-btn" title="Create new exercise" onclick="document.getElementById('new-exercise-id').focus()">
+            <span style="font-size: 18px">➕</span>
+        </div>
+        <div class="quick-action-btn" title="Check completeness" onclick="checkExerciseCompleteness()">
+            <span style="font-size: 18px">✅</span>
+        </div>
+    `;
+    document.body.appendChild(quickActions);
+});
+
+// Function to show auto-save indicator
+function showAutoSaveIndicator(status) {
+    const indicator = document.getElementById('autosave-indicator');
+    
+    indicator.className = 'autosave-indicator';
+    indicator.style.opacity = '1';
+    
+    switch (status) {
+        case 'saving':
+            indicator.classList.add('saving');
+            indicator.innerHTML = `<div class="spinner"></div><span>Saving changes...</span>`;
+            break;
+        case 'saved':
+            indicator.classList.add('saved');
+            indicator.innerHTML = `<span>✓ Changes saved</span>`;
+            setTimeout(() => {
+                indicator.style.opacity = '0';
+            }, 2000);
+            break;
+        case 'error':
+            indicator.classList.add('error');
+            indicator.innerHTML = `<span>⚠️ Error saving changes</span>`;
+            setTimeout(() => {
+                indicator.style.opacity = '0';
+            }, 4000);
+            break;
+    }
+}
+
+// Function to jump to next incomplete exercise
+function jumpToNextIncomplete() {
+    const exerciseCards = document.querySelectorAll('.exercise');
+    let foundIncomplete = false;
+    
+    // Start looking after the currently focused exercise
+    let startSearching = false;
+    if (!currentFocusedExercise) {
+        startSearching = true;
+    }
+    
+    for (const card of exerciseCards) {
+        if (!startSearching) {
+            if (card === currentFocusedExercise) {
+                startSearching = true;
+            }
+            continue;
+        }
+        
+        // Check if this card is incomplete
+        const hasPrimaryImage = card.querySelector('.status-dot[title="Has primary image"].green');
+        const hasPrimaryMuscles = card.querySelector('.status-dot[title="Has primary muscles"].green');
+        const hasInstructions = card.querySelector('.status-dot[title="Has instructions"].green');
+        
+        if (!hasPrimaryImage || !hasPrimaryMuscles || !hasInstructions) {
+            // Found an incomplete exercise
+            const exerciseId = card.id.split('exercise-')[1];
+            jumpToExercise(exerciseId);
+            foundIncomplete = true;
+            break;
+        }
+    }
+    
+    // If we haven't found an incomplete exercise after the current one, loop back to the beginning
+    if (!foundIncomplete && currentFocusedExercise) {
+        for (const card of exerciseCards) {
+            if (card === currentFocusedExercise) {
+                break;
+            }
+            
+            const hasPrimaryImage = card.querySelector('.status-dot[title="Has primary image"].green');
+            const hasPrimaryMuscles = card.querySelector('.status-dot[title="Has primary muscles"].green');
+            const hasInstructions = card.querySelector('.status-dot[title="Has instructions"].green');
+            
+            if (!hasPrimaryImage || !hasPrimaryMuscles || !hasInstructions) {
+                // Found an incomplete exercise
+                const exerciseId = card.id.split('exercise-')[1];
+                jumpToExercise(exerciseId);
+                foundIncomplete = true;
+                break;
+            }
+        }
+    }
+    
+    if (!foundIncomplete) {
+        showNotification('No incomplete exercises found', 'info');
+    }
 }
 </script>
