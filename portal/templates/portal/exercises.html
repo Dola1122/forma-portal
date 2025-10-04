@@ -166,6 +166,36 @@
     </div>
     
     <div class="form-section">
+      <h4 class="section-title">Media</h4>
+      
+      <div class="subsection">
+        <h5>Exercise Images</h5>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Primary Image</label>
+            <div class="image-editor-container new-image-container" id="new-image-container-1">
+              <div class="empty-image-container" onclick="triggerNewFileUpload(1)">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click to upload primary image</p>
+              </div>
+              <input type="file" id="new-image-upload-1" class="file-upload-input" accept="image/*" style="display: none;" onchange="handleNewImageSelection(this, 1)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Secondary Image</label>
+            <div class="image-editor-container new-image-container" id="new-image-container-2">
+              <div class="empty-image-container" onclick="triggerNewFileUpload(2)">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <p>Click to upload secondary image</p>
+              </div>
+              <input type="file" id="new-image-upload-2" class="file-upload-input" accept="image/*" style="display: none;" onchange="handleNewImageSelection(this, 2)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="form-section">
       <h4 class="section-title">Muscles & Instructions</h4>
       
       <!-- Primary Muscles Section -->
@@ -2255,6 +2285,9 @@ function createExercise() {
         added_count: 0
     };
     
+    // Show loading notification
+    showNotification('Creating exercise...', 'info');
+    
     fetch('{% url "create_exercise" %}', {
         method: 'POST',
         headers: {
@@ -2266,9 +2299,31 @@ function createExercise() {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            showNotification('Exercise created successfully', 'success');
-            // Reload the page to show the new exercise
-            window.location.reload();
+            const newExerciseId = data.id || id;
+            
+            // Check if we have images to upload
+            const hasImages = Object.values(newExerciseImages).some(img => img !== null);
+            
+            if (hasImages) {
+                showNotification('Exercise created. Uploading images...', 'info');
+                
+                // Upload images
+                uploadNewExerciseImages(newExerciseId)
+                    .then(() => {
+                        showNotification('Exercise created with images successfully', 'success');
+                        // Reload the page to show the new exercise
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        showNotification('Exercise created but there was an issue with image uploads: ' + error, 'warning');
+                        // Reload the page to show the new exercise anyway
+                        window.location.reload();
+                    });
+            } else {
+                showNotification('Exercise created successfully', 'success');
+                // Reload the page to show the new exercise
+                window.location.reload();
+            }
         } else {
             showNotification('Error creating exercise: ' + (data.error || 'Unknown error'), 'error');
         }
@@ -2331,6 +2386,159 @@ function quickEditMode(exerciseId) {
 }
 
 // Keyboard navigation
+// Variables to store the new exercise images
+let newExerciseImages = {
+    '1': null, // Primary image
+    '2': null  // Secondary image
+};
+
+function triggerNewFileUpload(imageType) {
+    const fileInput = document.getElementById(`new-image-upload-${imageType}`);
+    fileInput.click();
+}
+
+function handleNewImageSelection(inputElement, imageType) {
+    const file = inputElement.files[0];
+    if (!file) return;
+    
+    // Check if file is an image
+    if (!file.type.startsWith('image/')) {
+        showNotification('Please select an image file', 'error');
+        return;
+    }
+    
+    // Store the file for later upload
+    newExerciseImages[imageType] = file;
+    
+    // Show preview
+    const container = document.getElementById(`new-image-container-${imageType}`);
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        container.innerHTML = `
+            <img src="${e.target.result}" class="exercise-image" alt="${imageType === '1' ? 'Primary' : 'Secondary'} Image">
+            <div class="image-overlay">
+                <button class="image-edit-btn" onclick="triggerNewFileUpload(${imageType})">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="image-edit-btn" onclick="removeNewImage(${imageType})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+    };
+    
+    reader.readAsDataURL(file);
+    showNotification(`${imageType === '1' ? 'Primary' : 'Secondary'} image selected`, 'success');
+}
+
+function removeNewImage(imageType) {
+    // Clear stored image
+    newExerciseImages[imageType] = null;
+    
+    // Reset container to upload state
+    const container = document.getElementById(`new-image-container-${imageType}`);
+    container.innerHTML = `
+        <div class="empty-image-container" onclick="triggerNewFileUpload(${imageType})">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p>Click to upload ${imageType === '1' ? 'primary' : 'secondary'} image</p>
+        </div>
+        <input type="file" id="new-image-upload-${imageType}" class="file-upload-input" accept="image/*" style="display: none;" onchange="handleNewImageSelection(this, ${imageType})">
+    `;
+    
+    showNotification(`${imageType === '1' ? 'Primary' : 'Secondary'} image removed`, 'info');
+}
+
+function uploadNewExerciseImages(exerciseId) {
+    return new Promise((resolve, reject) => {
+        const imagesToUpload = Object.keys(newExerciseImages).filter(key => newExerciseImages[key] !== null);
+        
+        if (imagesToUpload.length === 0) {
+            resolve(true);
+            return;
+        }
+        
+        let uploadedCount = 0;
+        let errors = [];
+        
+        imagesToUpload.forEach(imageType => {
+            const file = newExerciseImages[imageType];
+            
+            // Create FormData
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('exercise_name', exerciseId);
+            formData.append('image_type', imageType);
+            
+            // Upload image
+            fetch('{% url "upload_exercise_image" %}', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    uploadedCount++;
+                    if (uploadedCount === imagesToUpload.length) {
+                        resolve(true);
+                    }
+                } else {
+                    errors.push(`Failed to upload ${imageType === '1' ? 'primary' : 'secondary'} image: ${data.error || 'Unknown error'}`);
+                    if (uploadedCount + errors.length === imagesToUpload.length) {
+                        if (errors.length > 0) {
+                            reject(errors.join(', '));
+                        } else {
+                            resolve(true);
+                        }
+                    }
+                }
+            })
+            .catch(error => {
+                errors.push(`Failed to upload ${imageType === '1' ? 'primary' : 'secondary'} image: ${error.message}`);
+                if (uploadedCount + errors.length === imagesToUpload.length) {
+                    if (errors.length > 0) {
+                        reject(errors.join(', '));
+                    } else {
+                        resolve(true);
+                    }
+                }
+            });
+        });
+    });
+}
+
+function clearNewExerciseForm() {
+    // Clear all form fields
+    document.getElementById('new-exercise-id').value = '';
+    document.getElementById('new-exercise-name').value = '';
+    document.getElementById('new-exercise-name-ar').value = '';
+    document.getElementById('new-exercise-category-en').value = '';
+    document.getElementById('new-exercise-category-ar').value = '';
+    document.getElementById('new-exercise-equipment-en').value = '';
+    document.getElementById('new-exercise-equipment-ar').value = '';
+    document.getElementById('new-exercise-force-en').value = '';
+    document.getElementById('new-exercise-force-ar').value = '';
+    document.getElementById('new-exercise-level-en').value = '';
+    document.getElementById('new-exercise-level-ar').value = '';
+    document.getElementById('new-exercise-mechanic-en').value = '';
+    document.getElementById('new-exercise-mechanic-ar').value = '';
+    document.getElementById('new-exercise-video-url').value = '';
+    
+    // Clear list items
+    document.getElementById('new-primary-muscles-en-list').innerHTML = '';
+    document.getElementById('new-primary-muscles-ar-list').innerHTML = '';
+    document.getElementById('new-secondary-muscles-en-list').innerHTML = '';
+    document.getElementById('new-secondary-muscles-ar-list').innerHTML = '';
+    document.getElementById('new-instructions-en-list').innerHTML = '';
+    document.getElementById('new-instructions-ar-list').innerHTML = '';
+    
+    // Clear images
+    removeNewImage('1');
+    removeNewImage('2');
+    
+    showNotification('Form cleared', 'info');
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     // Initialize exercise count, filters and other existing functionality
     updateVisibleExercisesCount();
